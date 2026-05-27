@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Rixe de Paname</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            font-family: 'Inter', 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .login-card {
+            background: #0a0a0a;
+            border: 1px solid #1f1f1f;
+            border-radius: 2rem;
+            padding: 2.5rem;
+            max-width: 460px;
+            margin: 12vh auto;
+            box-shadow: 0 25px 40px -15px rgba(0, 0, 0, 0.8);
+            transition: all 0.2s;
+        }
+
+        .login-card h2 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #e0e0e0, #a0a0a0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .login-sub {
+            text-align: center;
+            color: #5a5a5a;
+            font-size: 0.75rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #1c1c1c;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 6px;
+        }
+
+        .input-field {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-field label {
+            display: block;
+            color: #8a8a8a;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .input-field input {
+            width: 100%;
+            background: #111111;
+            border: 1px solid #262626;
+            padding: 14px 18px;
+            border-radius: 1.2rem;
+            color: #f0f0f0;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .input-field input:focus {
+            border-color: #666;
+            box-shadow: 0 0 0 2px rgba(100, 100, 100, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 14px;
+            border-radius: 2rem;
+            font-weight: 700;
+            color: #dddddd;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .login-btn:hover {
+            background: #2a2a2a;
+            border-color: #777;
+            color: white;
+        }
+
+        .error-msg {
+            background: rgba(180, 0, 0, 0.15);
+            border-left: 3px solid #aa3333;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #cc8888;
+            text-align: center;
+            display: none;
+        }
+
+        .dashboard {
+            display: none;
+        }
+
+        .top-bar {
+            background: #0a0a0a;
+            border: 1px solid #1e1e1e;
+            border-radius: 1.5rem;
+            padding: 0.8rem 1.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(0px);
+        }
+
+        .brand h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #e0e0e0;
+            letter-spacing: -0.5px;
+        }
+
+        .brand p {
+            font-size: 0.65rem;
+            color: #5f5f5f;
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stat {
+            background: #111;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            color: #aaa;
+            border: 1px solid #262626;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid #333;
+            padding: 6px 20px;
+            border-radius: 2rem;
+            color: #aaa;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.8rem;
+        }
+
+        .logout-btn:hover {
+            background: #1f1f1f;
+            color: white;
+            border-color: #666;
+        }
+
+        .search-section {
+            background: #0a0a0a;
+            border-radius: 1.5rem;
+            padding: 1rem 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid #1e1e1e;
+        }
+
+        .search-label {
+            font-size: 0.7rem;
+            color: #888;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .search-wrapper {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        #searchInput {
+            flex: 1;
+            background: #050505;
+            border: 1px solid #2a2a2a;
+            padding: 14px 20px;
+            border-radius: 2rem;
+            color: #f5f5f5;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        #searchInput:focus {
+            border-color: #666;
+        }
+
+        .search-btn {
+            background: #121212;
+            border: 1px solid #3a3a3a;
+            padding: 10px 24px;
+            border-radius: 2rem;
+            color: #ccc;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .search-btn:hover {
+            background: #1f1f1f;
+            color: white;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .profile-card {
+            background: #0c0c0c;
+            border: 1px solid #202020;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+
+        .profile-card:hover {
+            border-color: #444;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px -12px black;
+        }
+
+        .card-header {
+            background: #030303;
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #202020;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pseudo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #ffffff;
+            letter-spacing: -0.3px;
+        }
+
+        .provider-tag {
+            background: #1a1a1a;
+            padding: 0.2rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            color: #aaa;
+        }
+
+        .card-body {
+            padding: 1rem 1.2rem 1.2rem 1.2rem;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 0.7rem;
+            font-size: 0.8rem;
+            border-bottom: 1px dotted #181818;
+            padding-bottom: 6px;
+        }
+
+        .info-label {
+            width: 100px;
+            color: #7e7e7e;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #cfcfcf;
+            word-break: break-word;
+        }
+
+        .merged-section {
+            margin-top: 0.8rem;
+            background: #030303;
+            border-radius: 1rem;
+            padding: 0.5rem 0.8rem;
+        }
+
+        .merged-title {
+            font-size: 0.65rem;
+            color: #999;
+            margin-bottom: 6px;
+        }
+
+        .merged-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .merged-id {
+            background: #151515;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+            font-size: 0.65rem;
+            font-family: monospace;
+            color: #b0b0b0;
+        }
+
+        .badge-warning {
+            color: #c97e5a;
+            font-size: 0.65rem;
+            margin-top: 8px;
+            border-top: 1px solid #1f1f1f;
+            padding-top: 8px;
+        }
+
+        @media (max-width: 650px) {
+            body { padding: 0.8rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .info-label { width: 85px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Login -->
+    <div id="loginPanel" class="login-card">
+        <h2>RIXE DE PANAME</h2>
+        <div style="text-align: center;"><span class="login-sub">ACCÈS RESTREINT</span></div>
+        <div class="input-field">
+            <label>IDENTIFIANT</label>
+            <input type="text" id="loginUser" placeholder="agent / pseudo">
+        </div>
+        <div class="input-field">
+            <label>CODE SECRET</label>
+            <input type="password" id="loginPass" placeholder="••••••••">
+        </div>
+        <button id="doLogin" class="login-btn">AUTHENTIFICATION</button>
+        <div id="loginErrorMsg" class="error-msg">⛔ Échec de l'authentification</div>
+        <div style="margin-top: 1rem; text-align: center; font-size: 0.6rem; color: #2f2f2f;">own by zeleph</div>
+    </div>
+
+    <!-- Dashboard après login -->
+    <div id="dashboard" class="dashboard">
+        <div class="top-bar">
+            <div class="brand">
+                <h1>rixe de paname fiche </h1>
+                <p>toute les fiche des random</p>
+            </div>
+            <div class="stats">
+                <div class="stat" id="totalCount">0 fiches</div>
+                <div class="stat">MODE RECHERCHE</div>
+            </div>
+            <button id="logoutMain" class="logout-btn">⟡ DÉCONNEXION</button>
+        </div>
+
+        <!-- Recherche par pseudo -->
+        <div class="search-section">
+            <div class="search-label">🔍 RECHERCHE PAR PSEUDO / NOM D'UTILISATEUR</div>
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="pseudo, nom de rue, alias ...">
+                <button id="searchBtn" class="search-btn">FILTRER</button>
+                <button id="resetSearch" class="search-btn" style="background:#080808;">RÉINITIALISER</button>
+            </div>
+        </div>
+
+        <div id="cardsContainer" class="cards-grid">
+            <!-- fiches injectées dynamiquement -->
+        </div>
+    </div>
+</div>
+
+<script>
+    const VALID_USERNAME = "admin";
+    const PLAIN_PASSWORD = "Paname2025!";
+    const STORED_HASH = CryptoJS.SHA256(PLAIN_PASSWORD).toString();
+
+    const playersData = [
+        {
+            pseudo: "L2z",
+            identifier: "24-ACSX-HBPL",
+            provider: "CAF",
+            lastName: "JAWADI",
+            firstName: "SAID",
+            street: "19 RUE DE CHALONNAX",
+            complement: "PORTE 122 BATIMENT A",
+            city: "CLERMONT FERRAND",
+            postal: "63100",
+            birth: "2010-08-24",
+            gender: "M",
+            email: "farihayousufi1@gmail.com",
+            phone: "0665966790",
+            matricule: "1353821",
+            allocataire: "FARIHA JAWADI",
+            parentName: "FARIHA JAWADI",
+            parentEmail: "farihayousufi1@gmail.com",
+            mergedCount: 4,
+            mergedIds: ["24-ACSX-HBPL", "25-LLMH-ZVHF", "HZ3S-SAX2", "MTS-GBV-XLK"],
+            wantedLevel: "HAUTE"
+        },
+        {
+            pseudo: "Chk",
+            identifier: "25-ACGX-AGVV",
+            provider: "CAF",
+            lastName: "DIABY",
+            firstName: "MOUSTAPHA",
+            street: "17 RUE DES ETOURNEAUX",
+            complement: "APPAT 26",
+            city: "ERAGNY SUR OISE",
+            postal: "95610",
+            birth: "2011-09-11",
+            gender: "M",
+            email: "bartos1@live.fr",
+            phone: "0764247932",
+            matricule: "7210293",
+            allocataire: "ALHOUSSEHINE DIABY",
+            parentName: "ALHOUSSEHINE DIABY",
+            parentEmail: "bartos1@live.fr",
+            mergedCount: 4,
+            mergedIds: ["24-FCLH-RWTU", "25-ACGX-AGVV", "U8KV-7ZCN", "VCM-EQY-REV"],
+            wantedLevel: "HAUTE"
+        },
+        {
+            pseudo: "Kiwi",
+            identifier: "GB34-XJYM",
+            provider: "CAF",
+            lastName: "BENDAOUD",
+            firstName: "KHALIS",
+            street: "67 RUE SALVADOR ALLENDE",
+            complement: "LE CHEMIN DES TOULAITS",
+            city: "COURNON D AUVERGNE",
+            postal: "63800",
+            birth: "2012-10-12",
+            gender: "M",
+            email: "NADSAM.BEN@GMAIL.COM",
+            phone: "0624887500",
+            matricule: "1225134",
+            allocataire: "CELIA DERKAOUI",
+            parentName: "CELIA DERKAOUI",
+            parentEmail: "NADSAM.BEN@GMAIL.COM",
+            mergedCount: 0,
+            mergedIds: [],
+            wantedLevel: "MOYENNE"
+        }
+    ];
+
+    function formatDate(iso) {
+        if(!iso) return "inconnue";
+        let d = new Date(iso);
+        return d.toLocaleDateString('fr-FR');
+    }
+
+    function escapeHtml(str) {
+        if(!str) return "";
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function generateCard(person) {
+        let parentBlock = '';
+        if(person.parentName) {
+            parentBlock = `
+                <div class="info-row"><span class="info-label">Parent :</span><span class="info-value">${escapeHtml(person.parentName)}</span></div>
+                <div class="info-row"><span class="info-label">Email parent :</span><span class="info-value">${escapeHtml(person.parentEmail)}</span></div>
+            `;
+        }
+        let mergedHtml = '';
+        if(person.mergedIds && person.mergedIds.length) {
+            let tags = person.mergedIds.map(id => `<span class="merged-id">${escapeHtml(id)}</span>`).join('');
+            mergedHtml = `
+                <div class="merged-section">
+                    <div class="merged-title">🔗 FUSIONS (${person.mergedCount})</div>
+                    <div class="merged-list">${tags}</div>
+                </div>
+            `;
+        }
+        return `
+            <div class="profile-card">
+                <div class="card-header">
+                    <span class="pseudo">@${escapeHtml(person.pseudo)}</span>
+                    <span class="provider-tag">${escapeHtml(person.provider)}</span>
+                </div>
+                <div class="card-body">
+                    <div class="info-row"><span class="info-label">Identifiant :</span><span class="info-value">${escapeHtml(person.identifier)}</span></div>
+                    <div class="info-row"><span class="info-label">Nom complet :</span><span class="info-value">${escapeHtml(person.lastName)} ${escapeHtml(person.firstName)}</span></div>
+                    <div class="info-row"><span class="info-label">Naissance :</span><span class="info-value">${formatDate(person.birth)} (${person.gender === 'M' ? 'M' : 'F'})</span></div>
+                    <div class="info-row"><span class="info-label">Adresse :</span><span class="info-value">${escapeHtml(person.street)} ${person.complement ? ', '+escapeHtml(person.complement):''}, ${escapeHtml(person.postal)} ${escapeHtml(person.city)}</span></div>
+                    <div class="info-row"><span class="info-label">Contact :</span><span class="info-value">${escapeHtml(person.email)} / ${escapeHtml(person.phone)}</span></div>
+                    <div class="info-row"><span class="info-label">Matricule :</span><span class="info-value">${escapeHtml(person.matricule)}</span></div>
+                    <div class="info-row"><span class="info-label">Allocataire :</span><span class="info-value">${escapeHtml(person.allocataire)}</span></div>
+                    ${parentBlock}
+                    ${mergedHtml}
+                    <div class="badge-warning">⚠️ NIVEAU DANGER : ${escapeHtml(person.wantedLevel)}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    let currentSearchQuery = "";
+
+    function renderCards() {
+        const container = document.getElementById('cardsContainer');
+        let filtered = [...playersData];
+        if(currentSearchQuery.trim() !== "") {
+            const query = currentSearchQuery.trim().toLowerCase();
+            filtered = playersData.filter(p => 
+                p.pseudo.toLowerCase().includes(query) ||
+                p.firstName.toLowerCase().includes(query) ||
+                p.lastName.toLowerCase().includes(query) ||
+                p.identifier.toLowerCase().includes(query)
+            );
+        }
+        if(filtered.length === 0) {
+            container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding: 3rem; color:#666;">❌ AUCUNE FICHE CORRESPONDANT AU PSEUDO / RECHERCHE</div>`;
+        } else {
+            container.innerHTML = filtered.map(p => generateCard(p)).join('');
+        }
+        document.getElementById('totalCount').innerHTML = `${filtered.length} fiches`;
+    }
+
+    function checkSession() {
+        if(localStorage.getItem('black_database_logged') === 'true') {
+            document.getElementById('loginPanel').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            renderCards();
+        } else {
+            document.getElementById('loginPanel').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+    }
+
+    function doLogin(username, password) {
+        const inputHash = CryptoJS.SHA256(password).toString();
+        if(username === VALID_USERNAME && inputHash === STORED_HASH) {
+            localStorage.setItem('black_database_logged', 'true');
+            return true;
+        }
+        return false;
+    }
+
+    document.getElementById('doLogin').addEventListener('click', () => {
+        const user = document.getElementById('loginUser').value.trim();
+        const pwd = document.getElementById('loginPass').value;
+        const errDiv = document.getElementById('loginErrorMsg');
+        if(!user || !pwd) {
+            errDiv.textContent = "❗ Remplissez tous les champs";
+            errDiv.style.display = 'block';
+            return;
+        }
+        if(doLogin(user, pwd)) {
+            errDiv.style.display = 'none';
+            checkSession();
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
+        } else {
+            errDiv.textContent = "⛔ Identifiant ou mot de passe incorrect";
+            errDiv.style.display = 'block';
+            document.getElementById('loginPass').value = '';
+        }
+    });
+
+    document.getElementById('logoutMain').addEventListener('click', () => {
+        localStorage.removeItem('black_database_logged');
+        checkSession();
+        currentSearchQuery = "";
+        document.getElementById('searchInput').value = "";
+    });
+
+    document.getElementById('searchBtn').addEventListener('click', () => {
+        currentSearchQuery = document.getElementById('searchInput').value;
+        renderCards();
+    });
+    document.getElementById('resetSearch').addEventListener('click', () => {
+        document.getElementById('searchInput').value = "";
+        currentSearchQuery = "";
+        renderCards();
+    });
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') {
+            currentSearchQuery = document.getElementById('searchInput').value;
+            renderCards();
+        }
+    });
+    const handleLoginEnter = (e) => { if(e.key === 'Enter') document.getElementById('doLogin').click(); };
+    document.getElementById('loginUser').addEventListener('keypress', handleLoginEnter);
+    document.getElementById('loginPass').addEventListener('keypress', handleLoginEnter);
+
+    checkSession();
+</script>
+</body>
+</html>
