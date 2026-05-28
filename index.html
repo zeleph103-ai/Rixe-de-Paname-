@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Fiche2Paname</title>
+    <title>Fiche2Paname - BrixHub Tools</title>
     <script>
         (function(){
             document.addEventListener('contextmenu', e => e.preventDefault());
@@ -124,7 +124,7 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* ===== FICHES ===== */
+        /* ===== FICHES (local) ===== */
         .add-panel {
             background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 1.5rem;
             padding: 1.2rem 1.8rem; margin-bottom: 1.5rem;
@@ -200,82 +200,161 @@
         .card-actions .edit-btn:hover { background: #1a1a2a; color: #aaaaff; border-color: #445; }
         .badge-local { background: #1a2a1a; color: #8c8; padding: 2px 10px; border-radius: 2rem; font-size: 0.6rem; border: 1px solid #2a3a2a; }
 
-        /* ===== SOON PAGE ===== */
-        .soon-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 55vh;
-            text-align: center;
+        /* ===== BRIXHUB STYLES (intégrés dans l'onglet OUTILS) ===== */
+        .brix-panel {
             background: #0a0a0a;
             border: 1px solid #1e1e1e;
-            border-radius: 2rem;
-            padding: 3rem 2rem;
-            position: relative;
-            overflow: hidden;
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.8rem;
+            margin-bottom: 1.5rem;
         }
-        .soon-container::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-image: radial-gradient(rgba(255,255,255,0.015) 1px, transparent 1px);
-            background-size: 30px 30px;
-            pointer-events: none;
+        .brix-panel h3 {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            border-left: 3px solid #666;
+            padding-left: 10px;
         }
-        .soon-glow {
-            font-size: 8rem;
-            font-weight: 900;
-            letter-spacing: 12px;
-            background: linear-gradient(135deg, #2a2a2a 0%, #444 30%, #2a2a2a 60%, #555 100%);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: shimmer 3s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-            line-height: 1;
-            text-shadow: 0 0 60px rgba(100,100,100,0.1);
-        }
-        .soon-sub {
-            color: #444;
-            font-size: 1.1rem;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            margin-top: 1rem;
-            position: relative;
-            z-index: 1;
-            font-weight: 300;
-        }
-        .soon-dots {
+        .brix-flex {
             display: flex;
-            gap: 12px;
-            margin-top: 2rem;
-            position: relative;
-            z-index: 1;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
         }
-        .soon-dot {
-            width: 8px;
-            height: 8px;
-            background: #333;
-            border-radius: 50%;
-            animation: pulse 1.8s ease-in-out infinite;
+        .brix-field {
+            flex: 1;
+            min-width: 150px;
         }
-        .soon-dot:nth-child(2) { animation-delay: 0.3s; }
-        .soon-dot:nth-child(3) { animation-delay: 0.6s; }
-        .soon-dot:nth-child(4) { animation-delay: 0.9s; }
-
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        .brix-field label {
+            display: block;
+            font-size: 0.65rem;
+            color: #aaa;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.3); }
+        .brix-field input, .brix-field select {
+            width: 100%;
+            background: #111;
+            border: 1px solid #262626;
+            padding: 10px 14px;
+            border-radius: 1rem;
+            color: #f0f0f0;
+            font-size: 0.85rem;
+            outline: none;
         }
-
+        .brix-field input:focus { border-color: #666; }
+        .brix-btn {
+            background: #121212;
+            border: 1px solid #3a3a3a;
+            padding: 10px 24px;
+            border-radius: 2rem;
+            color: #ccc;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.8rem;
+        }
+        .brix-btn:hover {
+            background: #1f1f1f;
+            color: white;
+            border-color: #777;
+        }
+        .brix-result {
+            background: #050505;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            max-height: 500px;
+            overflow: auto;
+            white-space: pre-wrap;
+            border: 1px solid #1c1c1c;
+        }
+        .brix-quota {
+            background: #111;
+            padding: 6px 12px;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        /* fiches client BrixHub */
+        .fiche-client {
+            background: #12121c;
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            border: 1px solid #2a2a3a;
+            font-family: 'Courier New', 'SF Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            transition: 0.2s;
+        }
+        .fiche-client:hover {
+            border-color: #6a6a8a;
+            background: #161622;
+        }
+        .fiche-line {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 0.4rem;
+        }
+        .fiche-label {
+            font-weight: bold;
+            min-width: 130px;
+            color: #aaa;
+        }
+        .fiche-value {
+            color: #f0f0f0;
+            word-break: break-word;
+        }
+        .badge-sources {
+            background: #2a2a3a;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            margin-right: 6px;
+            margin-top: 6px;
+            font-family: system-ui;
+        }
+        .badge-confidence {
+            background: #2a4a2a;
+            color: #aaffaa;
+        }
+        .button-group {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .button-group button {
+            background: #1e1e2a;
+            border: 1px solid #3a3a4a;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            border-radius: 1rem;
+            font-weight: normal;
+        }
+        .button-group button:hover {
+            background: #2a2a3a;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+        .warning {
+            background: #332211;
+            border-left: 4px solid #ffaa44;
+            padding: 12px;
+            margin-bottom: 1.5rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+        }
         .toast {
             position: fixed; bottom: 30px; right: 30px; z-index: 9999;
             background: #1a1a1a; border: 1px solid #333; border-radius: 1rem;
@@ -289,7 +368,8 @@
             .cards-grid { grid-template-columns: 1fr; }
             .info-label { width: 85px; }
             .add-grid { grid-template-columns: 1fr 1fr; }
-            .soon-glow { font-size: 4.5rem; letter-spacing: 6px; }
+            .result-grid { grid-template-columns: 1fr; }
+            .fiche-label { min-width: 100px; }
         }
     </style>
 </head>
@@ -334,7 +414,7 @@
             <button class="tab-btn" data-tab="tabOutils">⚙ OUTILS</button>
         </div>
 
-        <!-- ===== TAB 1 : FICHES ===== -->
+        <!-- ===== TAB 1 : FICHES (local) ===== -->
         <div id="tabFiches" class="tab-content active">
             <div class="add-panel">
                 <h3>➕ AJOUTER UNE FICHE</h3>
@@ -362,7 +442,6 @@
                     <button id="clearAddForm" class="btn-danger">✕ VIDER</button>
                 </div>
             </div>
-
             <div class="search-section">
                 <div class="search-label">🔍 RECHERCHE</div>
                 <div class="search-wrapper">
@@ -371,32 +450,78 @@
                     <button id="resetSearch" class="search-btn" style="background:#080808;">RÉINITIALISER</button>
                 </div>
             </div>
-
             <div id="cardsContainer" class="cards-grid"></div>
         </div>
 
-        <!-- ===== TAB 2 : OUTILS (SOON) ===== -->
+        <!-- ===== TAB 2 : OUTILS (BrixHub) ===== -->
         <div id="tabOutils" class="tab-content">
-            <div class="soon-container">
-                <div class="soon-glow">SOON</div>
-                <div class="soon-sub">outils disponibles prochainement</div>
-                <div class="soon-dots">
-                    <div class="soon-dot"></div>
-                    <div class="soon-dot"></div>
-                    <div class="soon-dot"></div>
-                    <div class="soon-dot"></div>
+            <!-- Avertissement proxy -->
+            <div class="warning" id="warningBox">
+                ⚠️ <strong>Activation unique du proxy :</strong> 
+                <a href="https://cors-anywhere.herokuapp.com/" target="_blank" id="corsLink">Cliquez ici</a> puis sur <strong>"Request temporary access"</strong>. 
+                Revenez et rafraîchissez la page.<br>
+                <span id="proxyStatus" style="color:#88ff88;">⚪ En attente d'activation...</span>
+            </div>
+
+            <!-- Interface BrixHub -->
+            <div class="brix-panel">
+                <div class="brix-quota" id="brixQuotaDisplay">📊 Quota: --</div>
+                <h3>🔎 Recherche multicritères (POST /search)</h3>
+                <div class="brix-flex">
+                    <div class="brix-field"><label>Nom</label><input type="text" id="brix_nom" placeholder="Dupont"></div>
+                    <div class="brix-field"><label>Prénom</label><input type="text" id="brix_prenom" placeholder="Jean"></div>
+                    <div class="brix-field"><label>Email</label><input type="email" id="brix_email" placeholder="jean@exemple.com"></div>
+                    <div class="brix-field"><label>Téléphone</label><input type="text" id="brix_phone" placeholder="0612345678"></div>
                 </div>
+                <div class="brix-flex">
+                    <div class="brix-field"><label>Ville</label><input type="text" id="brix_ville" placeholder="Paris"></div>
+                    <div class="brix-field"><label>CP</label><input type="text" id="brix_cp" placeholder="75001"></div>
+                    <div class="brix-field"><label>IBAN</label><input type="text" id="brix_iban" placeholder="FR76..."></div>
+                    <div class="brix-field"><label>Flexible</label><select id="brix_flexible"><option value="false">Exact</option><option value="true">Contient</option></select></div>
+                    <div class="brix-field"><label>Résultats/page</label><select id="brix_perpage"><option>10</option><option>25</option><option>50</option><option>100</option></select></div>
+                    <div class="brix-field"><label>Page</label><input type="number" id="brix_page" value="1" min="1"></div>
+                    <button id="brixSearchBtn" class="brix-btn">🔍 Rechercher</button>
+                </div>
+                <div id="brixSearchResult" class="result-grid"></div>
+            </div>
+
+            <div class="brix-panel">
+                <h3>📧 Lookup reverse (email / téléphone / IBAN)</h3>
+                <div class="brix-flex">
+                    <div class="brix-field"><label>Email</label><input type="email" id="lookupEmail" placeholder="pseudo@exemple.com"></div>
+                    <button id="lookupEmailBtn" class="brix-btn">📧 Chercher</button>
+                    <div class="brix-field"><label>Téléphone</label><input type="text" id="lookupPhone" placeholder="0612345678"></div>
+                    <button id="lookupPhoneBtn" class="brix-btn">📞 Chercher</button>
+                    <div class="brix-field"><label>IBAN</label><input type="text" id="lookupIban" placeholder="FR7630006000011234567890189"></div>
+                    <button id="lookupIbanBtn" class="brix-btn">🏦 Chercher</button>
+                </div>
+                <div id="lookupResult" class="result-grid"></div>
+            </div>
+
+            <div class="brix-panel">
+                <h3>👤 Mon compte & stats (GET /me)</h3>
+                <button id="brixMeBtn" class="brix-btn">🔄 Rafraîchir mes infos</button>
+                <div id="meResult" class="result-grid"></div>
+            </div>
+
+            <div class="brix-panel">
+                <h3>📜 Logs d'utilisation (GET /usage)</h3>
+                <div class="brix-flex">
+                    <div class="brix-field"><label>Limite (max 200)</label><input type="number" id="usageLimit" value="20" min="1" max="200"></div>
+                    <button id="brixUsageBtn" class="brix-btn">📜 Charger logs</button>
+                </div>
+                <div id="usageResult" class="result-grid"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    // ==================== GESTION FICHES LOCALES (INCHANGÉE) ====================
     const _hidden = {
         profiles: 'dox_data',
         session: 'dox_sess'
     };
-
     const _A = (function(){
         const u = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse('cjng'));
         const p = CryptoJS.SHA256('cjng').toString();
@@ -417,9 +542,7 @@
         localStorage.setItem(_hidden.profiles, JSON.stringify(def));
         return def;
     }
-
     function saveProfiles(arr) { localStorage.setItem(_hidden.profiles, JSON.stringify(arr)); }
-
     function esc(s) { if(!s) return ''; return String(s).replace(/[&<>]/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m];}); }
     function fmtDate(iso) { if(!iso) return 'inconnue'; try { return new Date(iso).toLocaleDateString('fr-FR'); } catch(e) { return iso; } }
     function toast(msg) {
@@ -428,9 +551,7 @@
         el.style.display = 'block';
         setTimeout(() => el.style.display = 'none', 3200);
     }
-
     let currentSearchQuery = "";
-
     function renderCards() {
         const container = document.getElementById('cardsContainer');
         let profiles = getProfiles();
@@ -488,7 +609,6 @@
             </div>`;
         }).join('');
         document.getElementById('totalCount').innerHTML = `${filtered.length} fiches`;
-
         document.querySelectorAll('.del-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const idx = parseInt(this.dataset.idx);
@@ -534,7 +654,6 @@
             });
         });
     }
-
     document.getElementById('addFicheBtn').addEventListener('click', function() {
         const editIdx = this.dataset.editIdx;
         const obj = {
@@ -578,7 +697,6 @@
         renderCards();
         clearAddForm();
     });
-
     function clearAddForm() {
         const ids = ['addPseudo','addIdent','addProvider','addNom','addPrenom','addBirth','addGender','addStreet','addComp','addCp','addVille','addEmail','addPhone','addMatricule','addAlloc','addParent','addParentEmail'];
         ids.forEach(id => document.getElementById(id).value = '');
@@ -586,7 +704,6 @@
         document.getElementById('addFicheBtn').textContent = '💾 ENREGISTRER';
     }
     document.getElementById('clearAddForm').addEventListener('click', clearAddForm);
-
     function doSearch() { currentSearchQuery = document.getElementById('searchInput').value; renderCards(); }
     document.getElementById('searchBtn').addEventListener('click', doSearch);
     document.getElementById('resetSearch').addEventListener('click', () => {
@@ -595,7 +712,6 @@
         renderCards();
     });
     document.getElementById('searchInput').addEventListener('keypress', e => { if(e.key === 'Enter') doSearch(); });
-
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -604,7 +720,6 @@
             document.getElementById(this.dataset.tab).classList.add('active');
         });
     });
-
     function checkSession() {
         if(localStorage.getItem(_hidden.session) === 'true') {
             document.getElementById('loginPanel').style.display = 'none';
@@ -615,7 +730,6 @@
             document.getElementById('dashboard').style.display = 'none';
         }
     }
-
     document.getElementById('doLogin').addEventListener('click', () => {
         const user = document.getElementById('loginUser').value.trim();
         const pwd = document.getElementById('loginPass').value;
@@ -635,18 +749,330 @@
             document.getElementById('loginPass').value = '';
         }
     });
-
     document.getElementById('logoutMain').addEventListener('click', () => {
         localStorage.removeItem(_hidden.session);
         currentSearchQuery = '';
         document.getElementById('searchInput').value = '';
         checkSession();
     });
-
     document.getElementById('loginUser').addEventListener('keypress', e => { if(e.key === 'Enter') document.getElementById('doLogin').click(); });
     document.getElementById('loginPass').addEventListener('keypress', e => { if(e.key === 'Enter') document.getElementById('doLogin').click(); });
-
     checkSession();
+
+    // ==================== BRIXHUB API (intégration complète) ====================
+    const BRIX_API_KEY = "brix_ZEhVnoM26YbtYU633Aa42Jirj7q3R1IaUka57rYllDl_EZr-";
+    const BRIX_BASE = "https://brixhub.net/api/v1";
+    const PROXY = "https://cors-anywhere.herokuapp.com/";
+
+    async function brixRequest(endpoint, method = 'GET', body = null) {
+        const target = `${BRIX_BASE}/${endpoint}`;
+        const url = PROXY + target;
+        const headers = {
+            "X-API-Key": BRIX_API_KEY,
+            "User-Agent": "Fiche2Paname/1.0",
+            "Content-Type": "application/json"
+        };
+        const options = { method, headers };
+        if (body) options.body = JSON.stringify(body);
+        const response = await fetch(url, options);
+        if (response.status === 403) throw new Error("Proxy non activé. Cliquez sur le lien orange.");
+        const text = await response.text();
+        let data;
+        try { data = JSON.parse(text); } catch(e) { throw new Error("Réponse invalide : " + text.slice(0, 100)); }
+        if (!response.ok) throw new Error(data.message || data.error || `HTTP ${response.status}`);
+        return data;
+    }
+
+    // Génération texte fiche (pour copie)
+    function generateTextFiche(profile) {
+        const nomFamille = profile.nom_famille || profile.lastName || '';
+        const prenom = profile.prenom || profile.firstName || '';
+        const identifiant = profile.identifier || profile.nom_utilisateur || '';
+        const email = profile.email || '';
+        const telephone = profile.telephone || profile.phone || '';
+        const adresse = profile.adresse || profile.street || '';
+        const complement = profile.complement_adresse || profile.complement || '';
+        const cp = profile.code_postal || profile.postal || '';
+        const ville = profile.ville || profile.city || '';
+        const naissance = profile.date_naissance || profile.birth || '';
+        const genre = profile.genre || profile.gender || '';
+        const matricule = profile.matricule || '';
+        const allocataire = profile.allocataire || '';
+        const parentNom = profile.parentName || '';
+        const parentEmail = profile.parentEmail || '';
+        const sources = profile._sources || [];
+        const mergedIds = profile.mergedIds || [];
+        const mergedCount = profile.mergedCount || mergedIds.length;
+        let adresseComplete = '';
+        if (adresse) adresseComplete += adresse;
+        if (complement) adresseComplete += (adresseComplete ? ', ' : '') + complement;
+        if (cp) adresseComplete += (adresseComplete ? ' ' : '') + cp;
+        if (ville) adresseComplete += (adresseComplete ? ' ' : '') + ville;
+        let lines = [];
+        if (identifiant) lines.push(`IDENTIFIANT :    ${identifiant}`);
+        if (nomFamille || prenom) lines.push(`NOM COMPLET :    ${nomFamille} ${prenom}`);
+        let naissanceStr = '';
+        if (naissance) {
+            let d = new Date(naissance);
+            if (!isNaN(d)) naissanceStr = d.toLocaleDateString('fr-FR');
+            else naissanceStr = naissance;
+            if (genre) naissanceStr += ` (${genre.toUpperCase() === 'M' ? 'M' : 'F'})`;
+            lines.push(`NAISSANCE :    ${naissanceStr}`);
+        }
+        if (adresseComplete) lines.push(`ADRESSE :    ${adresseComplete}`);
+        if (email || telephone) {
+            let contact = [];
+            if (email) contact.push(email);
+            if (telephone) contact.push(telephone);
+            lines.push(`CONTACT :    ${contact.join(' / ')}`);
+        }
+        if (matricule) lines.push(`MATRICULE :    ${matricule}`);
+        if (allocataire) lines.push(`ALLOCATAIRE :    ${allocataire}`);
+        if (parentNom) lines.push(`PARENT :    ${parentNom}`);
+        if (parentEmail) lines.push(`EMAIL PARENT :    ${parentEmail}`);
+        if (mergedCount > 0 && mergedIds.length) {
+            lines.push(`\n🔍 FUSIONS (${mergedCount})`);
+            let fusionLine = '';
+            for (let i = 0; i < mergedIds.length; i++) {
+                if ((i % 3 === 0) && i !== 0) {
+                    lines.push(`   ${fusionLine}`);
+                    fusionLine = '';
+                }
+                fusionLine += (fusionLine ? '    ' : '   ') + mergedIds[i];
+            }
+            if (fusionLine) lines.push(`   ${fusionLine}`);
+        }
+        return lines.join('\n');
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function renderClientCard(profile) {
+        const nomFamille = profile.nom_famille || profile.lastName || '';
+        const prenom = profile.prenom || profile.firstName || '';
+        const identifiant = profile.identifier || profile.nom_utilisateur || '';
+        const email = profile.email || '';
+        const telephone = profile.telephone || profile.phone || '';
+        const adresse = profile.adresse || profile.street || '';
+        const complement = profile.complement_adresse || profile.complement || '';
+        const cp = profile.code_postal || profile.postal || '';
+        const ville = profile.ville || profile.city || '';
+        const naissance = profile.date_naissance || profile.birth || '';
+        const genre = profile.genre || profile.gender || '';
+        const matricule = profile.matricule || '';
+        const allocataire = profile.allocataire || '';
+        const parentNom = profile.parentName || '';
+        const parentEmail = profile.parentEmail || '';
+        const sources = profile._sources || [];
+        const confiance = profile._confidence || 0;
+        const mergedIds = profile.mergedIds || [];
+        const mergedCount = profile.mergedCount || mergedIds.length;
+        let adresseComplete = '';
+        if (adresse) adresseComplete += adresse;
+        if (complement) adresseComplete += (adresseComplete ? ', ' : '') + complement;
+        if (cp) adresseComplete += (adresseComplete ? ' ' : '') + cp;
+        if (ville) adresseComplete += (adresseComplete ? ' ' : '') + ville;
+        let html = `<div class="fiche-client" data-profile='${JSON.stringify(profile).replace(/'/g, "&#39;")}'>`;
+        if (identifiant) html += `<div class="fiche-line"><span class="fiche-label">IDENTIFIANT :</span><span class="fiche-value">${escapeHtml(identifiant)}</span></div>`;
+        if (nomFamille || prenom) html += `<div class="fiche-line"><span class="fiche-label">NOM COMPLET :</span><span class="fiche-value">${escapeHtml(nomFamille)} ${escapeHtml(prenom)}</span></div>`;
+        if (naissance) {
+            let d = new Date(naissance);
+            let naisStr = isNaN(d) ? naissance : d.toLocaleDateString('fr-FR');
+            if (genre) naisStr += ` (${genre.toUpperCase() === 'M' ? 'M' : 'F'})`;
+            html += `<div class="fiche-line"><span class="fiche-label">NAISSANCE :</span><span class="fiche-value">${escapeHtml(naisStr)}</span></div>`;
+        }
+        if (adresseComplete) html += `<div class="fiche-line"><span class="fiche-label">ADRESSE :</span><span class="fiche-value">${escapeHtml(adresseComplete)}</span></div>`;
+        if (email || telephone) {
+            let contact = [];
+            if (email) contact.push(email);
+            if (telephone) contact.push(telephone);
+            html += `<div class="fiche-line"><span class="fiche-label">CONTACT :</span><span class="fiche-value">${escapeHtml(contact.join(' / '))}</span></div>`;
+        }
+        if (matricule) html += `<div class="fiche-line"><span class="fiche-label">MATRICULE :</span><span class="fiche-value">${escapeHtml(matricule)}</span></div>`;
+        if (allocataire) html += `<div class="fiche-line"><span class="fiche-label">ALLOCATAIRE :</span><span class="fiche-value">${escapeHtml(allocataire)}</span></div>`;
+        if (parentNom) html += `<div class="fiche-line"><span class="fiche-label">PARENT :</span><span class="fiche-value">${escapeHtml(parentNom)}</span></div>`;
+        if (parentEmail) html += `<div class="fiche-line"><span class="fiche-label">EMAIL PARENT :</span><span class="fiche-value">${escapeHtml(parentEmail)}</span></div>`;
+        if (mergedCount > 0 && mergedIds.length) {
+            html += `<div class="fiche-line" style="margin-top:6px;"><span class="fiche-label">🔍 FUSIONS (${mergedCount}) :</span><span class="fiche-value"></span></div>`;
+            let fusionHtml = `<div class="fiche-line"><span class="fiche-label"></span><span class="fiche-value">`;
+            for (let id of mergedIds) fusionHtml += `<span class="badge-sources" style="background:#1a1a2a;">${escapeHtml(id)}</span> `;
+            fusionHtml += `</span></div>`;
+            html += fusionHtml;
+        }
+        html += `<div style="margin-top: 8px;">`;
+        sources.forEach(s => html += `<span class="badge-sources">📎 ${escapeHtml(s)}</span> `);
+        if (confiance) html += `<span class="badge-sources badge-confidence">⭐ Confiance ${confiance}%</span>`;
+        html += `</div>`;
+        html += `<div class="button-group">`;
+        html += `<button class="copy-text-btn" data-json='${JSON.stringify(profile).replace(/'/g, "&#39;")}'>📋 Copier (texte)</button>`;
+        html += `<button class="copy-json-btn" data-json='${JSON.stringify(profile).replace(/'/g, "&#39;")}'>📄 Copier JSON</button>`;
+        html += `</div></div>`;
+        return html;
+    }
+
+    function renderResults(apiResponse, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        let items = [];
+        if (apiResponse.data && Array.isArray(apiResponse.data.results)) {
+            items = apiResponse.data.results;
+        } else if (apiResponse.data && !Array.isArray(apiResponse.data) && typeof apiResponse.data === 'object') {
+            items = [apiResponse.data];
+        } else if (apiResponse.results) {
+            items = apiResponse.results;
+        } else {
+            container.innerHTML = '<div class="empty-state">❌ Aucune fiche trouvée</div>';
+            return;
+        }
+        if (!items.length) {
+            container.innerHTML = '<div class="empty-state">😕 Aucun résultat</div>';
+            return;
+        }
+        container.innerHTML = items.map(profile => renderClientCard(profile)).join('');
+    }
+
+    document.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('copy-text-btn')) {
+            const profileStr = e.target.getAttribute('data-json');
+            if (profileStr) {
+                try {
+                    const profile = JSON.parse(profileStr);
+                    const textFiche = generateTextFiche(profile);
+                    await navigator.clipboard.writeText(textFiche);
+                    toast('✅ Fiche copiée (texte avec emojis)');
+                } catch(err) { toast('Erreur copie texte'); }
+            }
+        }
+        if (e.target.classList.contains('copy-json-btn')) {
+            const profileStr = e.target.getAttribute('data-json');
+            if (profileStr) {
+                try {
+                    const profile = JSON.parse(profileStr);
+                    const jsonStr = JSON.stringify(profile, null, 2);
+                    await navigator.clipboard.writeText(jsonStr);
+                    toast('✅ JSON copié');
+                } catch(err) { toast('Erreur copie JSON'); }
+            }
+        }
+    });
+
+    async function updateQuota() {
+        try {
+            const me = await brixRequest('me');
+            if (me.data && me.data.daily_quota) {
+                document.getElementById('brixQuotaDisplay').innerHTML = `📊 Quota: ${me.data.daily_used}/${me.data.daily_quota} requêtes`;
+            } else {
+                document.getElementById('brixQuotaDisplay').innerHTML = `📊 Quota: --`;
+            }
+        } catch(e) { document.getElementById('brixQuotaDisplay').innerHTML = `📊 Quota: erreur`; }
+    }
+
+    async function checkProxyStatus() {
+        try {
+            const test = await fetch(PROXY + "https://httpbin.org/get");
+            if (test.ok) {
+                document.getElementById('proxyStatus').innerHTML = "✅ Proxy actif !";
+                document.getElementById('warningBox').style.background = "#1a2a1a";
+            } else throw new Error();
+        } catch(e) {
+            document.getElementById('proxyStatus').innerHTML = "❌ Proxy inactif. Cliquez sur le lien pour l'activer.";
+        }
+    }
+    checkProxyStatus();
+    document.getElementById('corsLink').addEventListener('click', () => setTimeout(checkProxyStatus, 3000));
+
+    document.getElementById('brixSearchBtn').addEventListener('click', async () => {
+        const payload = {};
+        const nom = document.getElementById('brix_nom').value.trim(); if (nom) payload.nom_famille = nom;
+        const prenom = document.getElementById('brix_prenom').value.trim(); if (prenom) payload.prenom = prenom;
+        const email = document.getElementById('brix_email').value.trim(); if (email) payload.email = email;
+        const phone = document.getElementById('brix_phone').value.trim(); if (phone) payload.telephone = phone;
+        const ville = document.getElementById('brix_ville').value.trim(); if (ville) payload.ville = ville;
+        const cp = document.getElementById('brix_cp').value.trim(); if (cp) payload.code_postal = cp;
+        const iban = document.getElementById('brix_iban').value.trim(); if (iban) payload.iban = iban;
+        payload.flexible = document.getElementById('brix_flexible').value === 'true';
+        payload.per_page = parseInt(document.getElementById('brix_perpage').value);
+        payload.page = parseInt(document.getElementById('brix_page').value);
+        if (Object.keys(payload).filter(k => !['flexible','per_page','page'].includes(k)).length === 0) {
+            document.getElementById('brixSearchResult').innerHTML = '<div class="empty-state">⚠️ Remplissez au moins un champ</div>';
+            return;
+        }
+        document.getElementById('brixSearchResult').innerHTML = '<div class="empty-state">⏳ Recherche en cours...</div>';
+        try {
+            const result = await brixRequest('search', 'POST', payload);
+            renderResults(result, 'brixSearchResult');
+            updateQuota();
+        } catch(err) {
+            document.getElementById('brixSearchResult').innerHTML = `<div class="empty-state">❌ Erreur : ${err.message}</div>`;
+        }
+    });
+
+    async function performLookup(type, value, containerId) {
+        if (!value) {
+            document.getElementById(containerId).innerHTML = '<div class="empty-state">📭 Veuillez entrer une valeur</div>';
+            return;
+        }
+        document.getElementById(containerId).innerHTML = '<div class="empty-state">⏳ Recherche...</div>';
+        try {
+            const data = await brixRequest(`lookup/${type}/${encodeURIComponent(value)}`);
+            renderResults(data, containerId);
+            updateQuota();
+        } catch(err) {
+            document.getElementById(containerId).innerHTML = `<div class="empty-state">❌ Erreur : ${err.message}</div>`;
+        }
+    }
+    document.getElementById('lookupEmailBtn').onclick = () => performLookup('email', document.getElementById('lookupEmail').value.trim(), 'lookupResult');
+    document.getElementById('lookupPhoneBtn').onclick = () => performLookup('phone', document.getElementById('lookupPhone').value.trim(), 'lookupResult');
+    document.getElementById('lookupIbanBtn').onclick = () => performLookup('iban', document.getElementById('lookupIban').value.trim(), 'lookupResult');
+
+    document.getElementById('brixMeBtn').addEventListener('click', async () => {
+        document.getElementById('meResult').innerHTML = '<div class="empty-state">⏳ Chargement...</div>';
+        try {
+            const me = await brixRequest('me');
+            const info = me.data || me;
+            const htmlCard = `<div class="fiche-client"><div class="fiche-line"><span class="fiche-label">Plan :</span><span class="fiche-value">${info.plan || '?'}</span></div>
+            <div class="fiche-line"><span class="fiche-label">Quota journalier :</span><span class="fiche-value">${info.daily_used || 0}/${info.daily_quota || '?'}</span></div>
+            <div class="fiche-line"><span class="fiche-label">Total requêtes :</span><span class="fiche-value">${info.total_requests || 0}</span></div>
+            <div class="fiche-line"><span class="fiche-label">Résultats/req :</span><span class="fiche-value">${info.results_per_query || 10}</span></div>
+            <div class="fiche-line"><span class="fiche-label">Pagination :</span><span class="fiche-value">${info.pagination_enabled ? '✅ Oui' : '❌ Non'}</span></div></div>`;
+            document.getElementById('meResult').innerHTML = htmlCard;
+            updateQuota();
+        } catch(err) {
+            document.getElementById('meResult').innerHTML = `<div class="empty-state">❌ Erreur : ${err.message}</div>`;
+        }
+    });
+    document.getElementById('brixMeBtn').click();
+
+    document.getElementById('brixUsageBtn').addEventListener('click', async () => {
+        const limit = document.getElementById('usageLimit').value;
+        document.getElementById('usageResult').innerHTML = '<div class="empty-state">⏳ Chargement logs...</div>';
+        try {
+            const logs = await brixRequest(`usage?limit=${limit}&offset=0`);
+            const entries = logs.data || logs.results || [];
+            if (!entries.length) {
+                document.getElementById('usageResult').innerHTML = '<div class="empty-state">📭 Aucun log</div>';
+                return;
+            }
+            document.getElementById('usageResult').innerHTML = entries.map(log => `
+                <div class="fiche-client">
+                    <div class="fiche-line"><span class="fiche-label">🕒 Date :</span><span class="fiche-value">${new Date(log.timestamp).toLocaleString()}</span></div>
+                    <div class="fiche-line"><span class="fiche-label">🔗 Endpoint :</span><span class="fiche-value">${log.endpoint || '?'}</span></div>
+                    <div class="fiche-line"><span class="fiche-label">📊 Requête :</span><span class="fiche-value">${log.method || 'GET'} ${log.path || ''}</span></div>
+                </div>
+            `).join('');
+            updateQuota();
+        } catch(err) {
+            document.getElementById('usageResult').innerHTML = `<div class="empty-state">❌ Erreur : ${err.message}</div>`;
+        }
+    });
 </script>
 </body>
 </html>
