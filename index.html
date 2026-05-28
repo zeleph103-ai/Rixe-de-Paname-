@@ -348,14 +348,6 @@
             color: #b0b0b0;
         }
 
-        .badge-warning {
-            color: #c97e5a;
-            font-size: 0.65rem;
-            margin-top: 8px;
-            border-top: 1px solid #1f1f1f;
-            padding-top: 8px;
-        }
-
         @media (max-width: 650px) {
             body { padding: 0.8rem; }
             .cards-grid { grid-template-columns: 1fr; }
@@ -437,8 +429,7 @@
             parentName: "FARIHA JAWADI",
             parentEmail: "farihayousufi1@gmail.com",
             mergedCount: 4,
-            mergedIds: ["24-ACSX-HBPL", "25-LLMH-ZVHF", "HZ3S-SAX2", "MTS-GBV-XLK"],
-            wantedLevel: "HAUTE"
+            mergedIds: ["24-ACSX-HBPL", "25-LLMH-ZVHF", "HZ3S-SAX2", "MTS-GBV-XLK"]
         },
         {
             pseudo: "Chk",
@@ -459,8 +450,7 @@
             parentName: "ALHOUSSEHINE DIABY",
             parentEmail: "bartos1@live.fr",
             mergedCount: 4,
-            mergedIds: ["24-FCLH-RWTU", "25-ACGX-AGVV", "U8KV-7ZCN", "VCM-EQY-REV"],
-            wantedLevel: "HAUTE"
+            mergedIds: ["24-FCLH-RWTU", "25-ACGX-AGVV", "U8KV-7ZCN", "VCM-EQY-REV"]
         },
         {
             pseudo: "Kiwi",
@@ -481,11 +471,10 @@
             parentName: "CELIA DERKAOUI",
             parentEmail: "NADSAM.BEN@GMAIL.COM",
             mergedCount: 0,
-            mergedIds: [],
-            wantedLevel: "MOYENNE"
+            mergedIds: []
         },
         {
-            pseudo: "Isac",
+            pseudo: "Isac Pso",
             identifier: "92-ISAC-001",
             provider: "CAF - DECEMBRE 2025",
             lastName: "EZZIDI",
@@ -503,8 +492,7 @@
             parentName: "FATIMA BAKKAL",
             parentEmail: "FATIMABAKKAL92230@GMAIL.COM",
             mergedCount: 1,
-            mergedIds: ["92-ISAC-001"],
-            wantedLevel: "ÉLEVÉE"
+            mergedIds: ["92-ISAC-001"]
         }
     ];
 
@@ -558,7 +546,6 @@
                     <div class="info-row"><span class="info-label">Allocataire :</span><span class="info-value">${escapeHtml(person.allocataire)}</span></div>
                     ${parentBlock}
                     ${mergedHtml}
-                    <div class="badge-warning">⚠️ NIVEAU DANGER : ${escapeHtml(person.wantedLevel)}</div>
                 </div>
             </div>
         `;
