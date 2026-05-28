@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FICHE2PANAME</title>
+    <title>Fiche2Paname</title>
     <script>
         // Critical: deobfuscation/debugging countermeasures
         (function(){
@@ -281,7 +281,7 @@
 
     <!-- ============ LOGIN ============ -->
     <div id="loginPanel" class="login-card">
-        <h2> FICHE2PANAME </h2>
+        <h2>Fiche2Paname</h2>
         <div style="text-align: center;"><span class="login-sub">ACCÈS RESTREINT • PANAME</span></div>
         <div class="input-field">
             <label>IDENTIFIANT</label>
@@ -300,7 +300,7 @@
     <div id="dashboard" class="dashboard">
         <div class="top-bar">
             <div class="brand">
-                <h1>DOX</h1>
+                <h1>Fiche2Paname</h1>
                 <p>FICHIERS • PANAME NORD</p>
             </div>
             <div class="stats">
@@ -423,7 +423,7 @@
     const _A = (function(){
         // credentials
         const u = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse('admin'));
-        const p = CryptoJS.SHA256('Paname2025!').toString();
+        const p = CryptoJS.SHA256('root').toString();
         // base URL encoded
         const b64 = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse('https://brixhub.net/api/v1'));
         return { user: u, pass: p, base: b64 };
