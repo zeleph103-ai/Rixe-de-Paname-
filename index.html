@@ -5,11 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Fiche2Paname</title>
     <script>
-        // Critical: deobfuscation/debugging countermeasures
         (function(){
-            // Block right-click everywhere
             document.addEventListener('contextmenu', e => e.preventDefault());
-            // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
             document.addEventListener('keydown', e => {
                 const k = e.key;
                 const ctrl = e.ctrlKey || e.metaKey;
@@ -23,7 +20,6 @@
                     return false;
                 }
             });
-            // Override devtools check
             setInterval(function(){
                 const d = document.createElement('div');
                 Object.defineProperty(d, 'id', {get: function(){
@@ -53,7 +49,6 @@
         }
         .container { position: relative; z-index: 2; max-width: 1440px; margin: 0 auto; }
 
-        /* ===== LOGIN ===== */
         .login-card {
             background: #0a0a0a; border: 1px solid #1f1f1f; border-radius: 2rem;
             padding: 2.5rem; max-width: 460px; margin: 10vh auto;
@@ -75,13 +70,12 @@
             display: block; color: #8a8a8a; font-size: 0.75rem; font-weight: 500;
             margin-bottom: 0.5rem; letter-spacing: 1px;
         }
-        .input-field input, .input-field select {
+        .input-field input {
             width: 100%; background: #111111; border: 1px solid #262626;
             padding: 14px 18px; border-radius: 1.2rem; color: #f0f0f0;
             font-size: 0.95rem; outline: none; transition: 0.2s;
         }
-        .input-field select option { background: #111; color: #f0f0f0; }
-        .input-field input:focus, .input-field select:focus { border-color: #666; box-shadow: 0 0 0 2px rgba(100,100,100,0.2); }
+        .input-field input:focus { border-color: #666; box-shadow: 0 0 0 2px rgba(100,100,100,0.2); }
         .login-btn {
             width: 100%; background: #1a1a1a; border: 1px solid #333;
             padding: 14px; border-radius: 2rem; font-weight: 700; color: #dddddd;
@@ -95,7 +89,6 @@
             font-size: 0.8rem; color: #cc8888; text-align: center; display: none;
         }
 
-        /* ===== DASHBOARD ===== */
         .dashboard { display: none; }
         .top-bar {
             background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 1.5rem;
@@ -115,7 +108,6 @@
         }
         .logout-btn:hover { background: #1f1f1f; color: white; border-color: #666; }
 
-        /* ===== TABS ===== */
         .tabs {
             display: flex; gap: 4px; margin-bottom: 1.5rem;
             background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 1.5rem;
@@ -132,7 +124,7 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* ===== TAB 1 : Fiches ===== */
+        /* ===== FICHES ===== */
         .add-panel {
             background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 1.5rem;
             padding: 1.2rem 1.8rem; margin-bottom: 1.5rem;
@@ -208,56 +200,81 @@
         .card-actions .edit-btn:hover { background: #1a1a2a; color: #aaaaff; border-color: #445; }
         .badge-local { background: #1a2a1a; color: #8c8; padding: 2px 10px; border-radius: 2rem; font-size: 0.6rem; border: 1px solid #2a3a2a; }
 
-        /* ===== TAB 2 : Outils ===== */
-        .api-panel {
-            background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 1.5rem;
-            padding: 1.5rem 1.8rem; margin-bottom: 1.5rem;
+        /* ===== SOON PAGE ===== */
+        .soon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 55vh;
+            text-align: center;
+            background: #0a0a0a;
+            border: 1px solid #1e1e1e;
+            border-radius: 2rem;
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
         }
-        .api-panel h3 { color: #ccc; font-size: 0.85rem; margin-bottom: 0.3rem; letter-spacing: 1px; }
-        .api-panel .sub { color: #6a6a6a; font-size: 0.7rem; margin-bottom: 1rem; }
-        .api-tabs {
-            display: flex; gap: 4px; margin-bottom: 1rem; flex-wrap: wrap;
+        .soon-container::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: radial-gradient(rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
         }
-        .api-tabs button {
-            padding: 8px 18px; border-radius: 2rem; border: 1px solid #2a2a2a;
-            background: #0f0f0f; color: #777; font-size: 0.75rem; cursor: pointer; transition: 0.2s;
+        .soon-glow {
+            font-size: 8rem;
+            font-weight: 900;
+            letter-spacing: 12px;
+            background: linear-gradient(135deg, #2a2a2a 0%, #444 30%, #2a2a2a 60%, #555 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+            line-height: 1;
+            text-shadow: 0 0 60px rgba(100,100,100,0.1);
         }
-        .api-tabs button.active { background: #1a1a1a; color: #eee; border-color: #555; }
-        .api-tabs button:hover:not(.active) { color: #aaa; background: #141414; }
-        .api-fields {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px;
-            margin-bottom: 1rem;
+        .soon-sub {
+            color: #444;
+            font-size: 1.1rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
         }
-        .api-fields .input-field { margin-bottom: 0; }
-        .api-fields .input-field input, .api-fields .input-field select { padding: 10px 14px; border-radius: 1rem; font-size: 0.8rem; }
-        .api-fields .input-field label { font-size: 0.6rem; }
-        .api-action-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-        .api-action-row button {
-            padding: 10px 24px; border-radius: 2rem; font-weight: 600; font-size: 0.8rem;
-            cursor: pointer; transition: 0.2s; border: 1px solid #333; background: #121212; color: #ccc;
+        .soon-dots {
+            display: flex;
+            gap: 12px;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 1;
         }
-        .api-action-row button:hover { background: #1f1f1f; color: white; }
-        .api-status { font-size: 0.75rem; color: #888; margin-top: 6px; }
-        .api-results {
-            background: #050505; border: 1px solid #1e1e1e; border-radius: 1.2rem;
-            padding: 1rem; margin-top: 1rem; max-height: 500px; overflow-y: auto;
+        .soon-dot {
+            width: 8px;
+            height: 8px;
+            background: #333;
+            border-radius: 50%;
+            animation: pulse 1.8s ease-in-out infinite;
         }
-        .api-results pre {
-            color: #bbb; font-size: 0.75rem; white-space: pre-wrap; word-break: break-word;
-            font-family: 'Courier New', monospace; line-height: 1.5;
+        .soon-dot:nth-child(2) { animation-delay: 0.3s; }
+        .soon-dot:nth-child(3) { animation-delay: 0.6s; }
+        .soon-dot:nth-child(4) { animation-delay: 0.9s; }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
-        .api-results .result-card {
-            background: #0c0c0c; border: 1px solid #222; border-radius: 1rem;
-            padding: 0.8rem 1rem; margin-bottom: 0.8rem;
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.3); }
         }
-        .api-results .result-card .rfield {
-            font-size: 0.78rem; color: #ccc; margin-bottom: 3px;
-        }
-        .api-results .result-card .rlabel { color: #777; }
-        .api-results .result-card .rconf {
-            font-size: 0.7rem; color: #8a8; margin-top: 4px;
-        }
-        .api-results .no-results { color: #555; text-align: center; padding: 2rem; font-size: 0.85rem; }
 
         .toast {
             position: fixed; bottom: 30px; right: 30px; z-index: 9999;
@@ -272,6 +289,7 @@
             .cards-grid { grid-template-columns: 1fr; }
             .info-label { width: 85px; }
             .add-grid { grid-template-columns: 1fr 1fr; }
+            .soon-glow { font-size: 4.5rem; letter-spacing: 6px; }
         }
     </style>
 </head>
@@ -281,7 +299,7 @@
 
     <!-- ============ LOGIN ============ -->
     <div id="loginPanel" class="login-card">
-        <h2>Fiche2Paname</h2>
+        <h2>Fiche2paname</h2>
         <div style="text-align: center;"><span class="login-sub">ACCÈS RESTREINT • PANAME</span></div>
         <div class="input-field">
             <label>IDENTIFIANT</label>
@@ -300,12 +318,12 @@
     <div id="dashboard" class="dashboard">
         <div class="top-bar">
             <div class="brand">
-                <h1>Fiche2Paname</h1>
+                <h1>DOX</h1>
                 <p>FICHIERS • PANAME NORD</p>
             </div>
             <div class="stats">
                 <div class="stat" id="totalCount">0 fiches</div>
-                <div class="stat" id="outilsStat">▼</div>
+                <div class="stat">▼</div>
             </div>
             <button id="logoutMain" class="logout-btn">⟡ DÉCONNEXION</button>
         </div>
@@ -357,53 +375,16 @@
             <div id="cardsContainer" class="cards-grid"></div>
         </div>
 
-        <!-- ===== TAB 2 : OUTILS ===== -->
+        <!-- ===== TAB 2 : OUTILS (SOON) ===== -->
         <div id="tabOutils" class="tab-content">
-            <div class="api-panel">
-                <h3>⚙ OUTILS DE RECHERCHE</h3>
-                <div class="sub">Recherche multicritères et reverse lookup</div>
-
-                <div class="api-tabs">
-                    <button class="active" data-outil-tab="outilSearch">🔎 RECHERCHE</button>
-                    <button data-outil-tab="outilLookup">📞 REVERSE</button>
-                    <button data-outil-tab="outilCompte">📊 COMPTE</button>
-                </div>
-
-                <div id="outilSearch" class="api-fields" style="display:grid;">
-                    <div class="input-field"><label>NOM FAMILLE</label><input type="text" id="oNom" placeholder="Dupont" autocomplete="off"></div>
-                    <div class="input-field"><label>PRÉNOM</label><input type="text" id="oPrenom" placeholder="Jean" autocomplete="off"></div>
-                    <div class="input-field"><label>EMAIL</label><input type="text" id="oEmail" placeholder="email@ex.com" autocomplete="off"></div>
-                    <div class="input-field"><label>TÉLÉPHONE</label><input type="text" id="oPhone" placeholder="0612345678" autocomplete="off"></div>
-                    <div class="input-field"><label>VILLE</label><input type="text" id="oVille" placeholder="Paris" autocomplete="off"></div>
-                    <div class="input-field"><label>CODE POSTAL</label><input type="text" id="oCp" placeholder="75001" autocomplete="off"></div>
-                    <div class="input-field"><label>NIR / SÉCU</label><input type="text" id="oNir" placeholder="13 ou 15 chiffres" autocomplete="off"></div>
-                    <div class="input-field"><label>PSEUDO (exact)</label><input type="text" id="oPseudo" placeholder="nom_utilisateur" autocomplete="off"></div>
-                    <div class="input-field"><label>MODE</label><select id="oMode"><option value="false">Exact</option><option value="true">Flexible (contient)</option></select></div>
-                </div>
-
-                <div id="outilLookup" class="api-fields" style="display:none;">
-                    <div class="input-field"><label>TYPE</label>
-                        <select id="lookupType">
-                            <option value="email">EMAIL</option>
-                            <option value="phone">TÉLÉPHONE</option>
-                            <option value="iban">IBAN</option>
-                        </select>
-                    </div>
-                    <div class="input-field"><label>VALEUR</label><input type="text" id="lookupValue" placeholder="email ou téléphone" autocomplete="off"></div>
-                </div>
-
-                <div id="outilCompte" class="api-fields" style="display:none;">
-                    <div style="color:#888;font-size:0.8rem;padding:1rem 0;">Infos compte et quota.</div>
-                </div>
-
-                <div class="api-action-row">
-                    <button id="execOutilBtn">▶ EXÉCUTER</button>
-                    <button id="clearOutilResults" style="background:#080808;">VIDER</button>
-                    <span class="api-status" id="outilStatus">Prêt</span>
-                </div>
-
-                <div id="outilResults" class="api-results">
-                    <div class="no-results">Remplissez les critères puis EXÉCUTER.</div>
+            <div class="soon-container">
+                <div class="soon-glow">SOON</div>
+                <div class="soon-sub">outils disponibles prochainement</div>
+                <div class="soon-dots">
+                    <div class="soon-dot"></div>
+                    <div class="soon-dot"></div>
+                    <div class="soon-dot"></div>
+                    <div class="soon-dot"></div>
                 </div>
             </div>
         </div>
@@ -411,27 +392,17 @@
 </div>
 
 <script>
-    // ===== ANTI-INSPECTION =====
-    // Override toString of functions to hide logic
     const _hidden = {
         profiles: 'dox_data',
-        session: 'dox_sess',
-        apiKey: 'dox_apikey'
+        session: 'dox_sess'
     };
 
-    // ===== CONFIG (obfuscated) =====
     const _A = (function(){
-        // credentials
-        const u = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse('admin'));
-        const p = CryptoJS.SHA256('root').toString();
-        // base URL encoded
-        const b64 = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse('https://brixhub.net/api/v1'));
-        return { user: u, pass: p, base: b64 };
+        const u = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse('cjng'));
+        const p = CryptoJS.SHA256('cjng').toString();
+        return { user: u, pass: p };
     })();
 
-    function _b64d(s) { return CryptoJS.enc.Base64.parse(s).toString(CryptoJS.enc.Utf8); }
-
-    // ===== STORAGE =====
     function getProfiles() {
         try {
             const raw = localStorage.getItem(_hidden.profiles);
@@ -449,10 +420,8 @@
 
     function saveProfiles(arr) { localStorage.setItem(_hidden.profiles, JSON.stringify(arr)); }
 
-    // ===== UI HELPERS =====
     function esc(s) { if(!s) return ''; return String(s).replace(/[&<>]/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m];}); }
     function fmtDate(iso) { if(!iso) return 'inconnue'; try { return new Date(iso).toLocaleDateString('fr-FR'); } catch(e) { return iso; } }
-
     function toast(msg) {
         const el = document.getElementById('toastMsg');
         el.textContent = msg;
@@ -460,7 +429,6 @@
         setTimeout(() => el.style.display = 'none', 3200);
     }
 
-    // ===== RENDER FICHES =====
     let currentSearchQuery = "";
 
     function renderCards() {
@@ -567,7 +535,6 @@
         });
     }
 
-    // ===== ADD / UPDATE =====
     document.getElementById('addFicheBtn').addEventListener('click', function() {
         const editIdx = this.dataset.editIdx;
         const obj = {
@@ -620,7 +587,6 @@
     }
     document.getElementById('clearAddForm').addEventListener('click', clearAddForm);
 
-    // ===== SEARCH =====
     function doSearch() { currentSearchQuery = document.getElementById('searchInput').value; renderCards(); }
     document.getElementById('searchBtn').addEventListener('click', doSearch);
     document.getElementById('resetSearch').addEventListener('click', () => {
@@ -630,7 +596,6 @@
     });
     document.getElementById('searchInput').addEventListener('keypress', e => { if(e.key === 'Enter') doSearch(); });
 
-    // ===== TABS PRINCIPAUX =====
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -640,125 +605,11 @@
         });
     });
 
-    // ===== OUTILS TABS =====
-    document.querySelectorAll('[data-outil-tab]').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('[data-outil-tab]').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('#tabOutils .api-fields').forEach(f => f.style.display = 'none');
-            this.classList.add('active');
-            document.getElementById(this.dataset.outilTab).style.display = 'grid';
-        });
-    });
-
-    // ===== API KEY (runtime only, never in source) =====
-    let _brixKey = '';
-
-    function getApiKey() {
-        if(_brixKey) return _brixKey;
-        const saved = localStorage.getItem(_hidden.apiKey);
-        if(saved) { _brixKey = saved; return saved; }
-        // prompt once at runtime
-        const input = prompt('🔑 Entrez votre clé de service :');
-        if(input && input.trim()) {
-            _brixKey = input.trim();
-            localStorage.setItem(_hidden.apiKey, _brixKey);
-            return _brixKey;
-        }
-        return '';
-    }
-
-    // ===== EXECUTE OUTIL =====
-    document.getElementById('execOutilBtn').addEventListener('click', execOutil);
-    document.getElementById('clearOutilResults').addEventListener('click', () => {
-        document.getElementById('outilResults').innerHTML = '<div class="no-results">Effacé.</div>';
-        document.getElementById('outilStatus').textContent = 'Prêt';
-    });
-
-    async function execOutil() {
-        const key = getApiKey();
-        if(!key) { toast('❌ Clé de service requise'); return; }
-
-        const statusEl = document.getElementById('outilStatus');
-        const resultsEl = document.getElementById('outilResults');
-        statusEl.textContent = '⏳ ...';
-
-        const activeTab = document.querySelector('[data-outil-tab].active');
-        if(!activeTab) { statusEl.textContent = '❌ Erreur'; return; }
-        const tabId = activeTab.dataset.outilTab;
-        const base = _b64d(_A.base);
-        const headers = { 'X-API-Key': key, 'User-Agent': 'DoxApp/1.0', 'Content-Type': 'application/json' };
-
-        try {
-            if(tabId === 'outilCompte') {
-                const r = await fetch(base + '/me', { headers });
-                const txt = await r.text();
-                let j;
-                try { j = JSON.parse(txt); } catch(e) { j = { raw: txt }; }
-                resultsEl.innerHTML = `<pre>${esc(JSON.stringify(j, null, 2))}</pre>`;
-                statusEl.textContent = `✅ ${r.status} – Restant: ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
-                document.getElementById('outilsStat').textContent = `▼ ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
-                return;
-            }
-            if(tabId === 'outilLookup') {
-                const type = document.getElementById('lookupType').value;
-                const val = document.getElementById('lookupValue').value.trim();
-                if(!val) { statusEl.textContent = '❌ Entrez une valeur'; return; }
-                const r = await fetch(`${base}/lookup/${type}/${encodeURIComponent(val)}`, { headers });
-                const txt = await r.text();
-                let j;
-                try { j = JSON.parse(txt); } catch(e) { j = { raw: txt }; }
-                resultsEl.innerHTML = `<pre>${esc(JSON.stringify(j, null, 2))}</pre>`;
-                statusEl.textContent = `✅ ${r.status} – Restant: ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
-                document.getElementById('outilsStat').textContent = `▼ ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
-                return;
-            }
-            if(tabId === 'outilSearch') {
-                const body = {};
-                const map = { oNom:'nom_famille', oPrenom:'prenom', oEmail:'email', oPhone:'telephone', oVille:'ville', oCp:'code_postal', oNir:'nir', oPseudo:'nom_utilisateur' };
-                for(const [id, keyName] of Object.entries(map)) {
-                    const v = document.getElementById(id).value.trim();
-                    if(v) body[keyName] = v;
-                }
-                const mode = document.getElementById('oMode').value;
-                if(mode === 'true') body.flexible = true;
-                if(!Object.keys(body).length) { statusEl.textContent = '❌ Remplissez au moins un champ'; return; }
-                const r = await fetch(base + '/search', { method: 'POST', headers, body: JSON.stringify(body) });
-                const txt = await r.text();
-                let j;
-                try { j = JSON.parse(txt); } catch(e) { j = { raw: txt }; }
-                let html = '';
-                if(j.data && j.data.results && j.data.results.length) {
-                    j.data.results.forEach(r2 => {
-                        const fields = Object.entries(r2).filter(([k]) => !k.startsWith('_')).map(([k,v]) =>
-                            `<div class="rfield"><span class="rlabel">${k} :</span> ${esc(String(v))}</div>`
-                        ).join('');
-                        html += `<div class="result-card">${fields}<div class="rconf">🔒 Confiance: ${r2._confidence ?? '?'}% • ${(r2._sources||[]).join(', ') || ''}</div></div>`;
-                    });
-                } else if(j.data && j.data.results) {
-                    html = '<div class="no-results">✅ Aucun résultat.</div>';
-                } else {
-                    html = `<pre>${esc(JSON.stringify(j, null, 2))}</pre>`;
-                }
-                resultsEl.innerHTML = html;
-                statusEl.textContent = `✅ ${r.status} – ${j.data?.results?.length || 0} résultats – Restant: ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
-                document.getElementById('outilsStat').textContent = `▼ ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
-                return;
-            }
-        } catch(err) {
-            resultsEl.innerHTML = `<div class="no-results">❌ Erreur : ${esc(err.message)}</div>`;
-            statusEl.textContent = '❌ Échec';
-        }
-    }
-
-    // ===== LOGIN =====
     function checkSession() {
         if(localStorage.getItem(_hidden.session) === 'true') {
             document.getElementById('loginPanel').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             renderCards();
-            // try to load key silently
-            const k = localStorage.getItem(_hidden.apiKey);
-            if(k) _brixKey = k;
         } else {
             document.getElementById('loginPanel').style.display = 'block';
             document.getElementById('dashboard').style.display = 'none';
@@ -795,12 +646,6 @@
     document.getElementById('loginUser').addEventListener('keypress', e => { if(e.key === 'Enter') document.getElementById('doLogin').click(); });
     document.getElementById('loginPass').addEventListener('keypress', e => { if(e.key === 'Enter') document.getElementById('doLogin').click(); });
 
-    // Enter on outil fields
-    document.querySelectorAll('#tabOutils input, #tabOutils select').forEach(el => {
-        el.addEventListener('keypress', e => { if(e.key === 'Enter') execOutil(); });
-    });
-
-    // Init
     checkSession();
 </script>
 </body>
