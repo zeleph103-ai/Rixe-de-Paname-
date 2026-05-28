@@ -3,643 +3,804 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Rixe de Paname</title>
+    <title>FICHE2PANAME</title>
+    <script>
+        // Critical: deobfuscation/debugging countermeasures
+        (function(){
+            // Block right-click everywhere
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            document.addEventListener('keydown', e => {
+                const k = e.key;
+                const ctrl = e.ctrlKey || e.metaKey;
+                if(
+                    k === 'F12' ||
+                    (ctrl && e.shiftKey && (k === 'I' || k === 'J' || k === 'C')) ||
+                    (ctrl && k === 'u' && !e.shiftKey) ||
+                    (ctrl && e.shiftKey && k === 'i')
+                ) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            // Override devtools check
+            setInterval(function(){
+                const d = document.createElement('div');
+                Object.defineProperty(d, 'id', {get: function(){
+                    document.body.innerHTML = '<div style="background:#000;color:#333;padding:2rem;text-align:center;font-family:sans-serif;margin-top:20vh;"><h1>ヴェー</h1><p style="font-size:0.8rem;color:#222;">.</p></div>';
+                }});
+                console.log('%c ', d);
+            }, 1000);
+        })();
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #000000;
             font-family: 'Inter', 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             padding: 1.5rem;
         }
-
         body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            pointer-events: none;
-            z-index: 0;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 37px 37px;
+            pointer-events: none; z-index: 0;
         }
+        .container { position: relative; z-index: 2; max-width: 1440px; margin: 0 auto; }
 
-        .container {
-            position: relative;
-            z-index: 2;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
+        /* ===== LOGIN ===== */
         .login-card {
-            background: #0a0a0a;
-            border: 1px solid #1f1f1f;
-            border-radius: 2rem;
-            padding: 2.5rem;
-            max-width: 460px;
-            margin: 12vh auto;
-            box-shadow: 0 25px 40px -15px rgba(0, 0, 0, 0.8);
-            transition: all 0.2s;
+            background: #0a0a0a; border: 1px solid #1f1f1f; border-radius: 2rem;
+            padding: 2.5rem; max-width: 460px; margin: 10vh auto;
+            box-shadow: 0 25px 40px -15px rgba(0,0,0,0.8);
         }
-
         .login-card h2 {
-            font-size: 1.9rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #e0e0e0, #a0a0a0);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-align: center;
-            margin-bottom: 0.3rem;
+            font-size: 2rem; font-weight: 700; letter-spacing: -0.5px;
+            background: linear-gradient(135deg,#e0e0e0,#a0a0a0);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            text-align: center; margin-bottom: 0.3rem;
         }
-
         .login-sub {
-            text-align: center;
-            color: #5a5a5a;
-            font-size: 0.75rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #1c1c1c;
-            display: inline-block;
-            width: auto;
-            margin-left: auto;
-            margin-right: auto;
-            padding-bottom: 6px;
+            text-align: center; color: #5a5a5a; font-size: 0.75rem; margin-bottom: 2rem;
+            border-bottom: 1px solid #1c1c1c; display: inline-block; width: auto;
+            margin-left: auto; margin-right: auto; padding-bottom: 6px;
         }
-
-        .input-field {
-            margin-bottom: 1.5rem;
-        }
-
+        .input-field { margin-bottom: 1.5rem; }
         .input-field label {
-            display: block;
-            color: #8a8a8a;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            letter-spacing: 1px;
+            display: block; color: #8a8a8a; font-size: 0.75rem; font-weight: 500;
+            margin-bottom: 0.5rem; letter-spacing: 1px;
         }
-
-        .input-field input {
-            width: 100%;
-            background: #111111;
-            border: 1px solid #262626;
-            padding: 14px 18px;
-            border-radius: 1.2rem;
-            color: #f0f0f0;
-            font-size: 0.95rem;
-            outline: none;
-            transition: 0.2s;
+        .input-field input, .input-field select {
+            width: 100%; background: #111111; border: 1px solid #262626;
+            padding: 14px 18px; border-radius: 1.2rem; color: #f0f0f0;
+            font-size: 0.95rem; outline: none; transition: 0.2s;
         }
-
-        .input-field input:focus {
-            border-color: #666;
-            box-shadow: 0 0 0 2px rgba(100, 100, 100, 0.2);
-        }
-
+        .input-field select option { background: #111; color: #f0f0f0; }
+        .input-field input:focus, .input-field select:focus { border-color: #666; box-shadow: 0 0 0 2px rgba(100,100,100,0.2); }
         .login-btn {
-            width: 100%;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            padding: 14px;
-            border-radius: 2rem;
-            font-weight: 700;
-            color: #dddddd;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            width: 100%; background: #1a1a1a; border: 1px solid #333;
+            padding: 14px; border-radius: 2rem; font-weight: 700; color: #dddddd;
+            cursor: pointer; transition: 0.2s; font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 1.5px;
         }
-
-        .login-btn:hover {
-            background: #2a2a2a;
-            border-color: #777;
-            color: white;
-        }
-
+        .login-btn:hover { background: #2a2a2a; border-color: #777; color: white; }
         .error-msg {
-            background: rgba(180, 0, 0, 0.15);
-            border-left: 3px solid #aa3333;
-            padding: 0.8rem;
-            border-radius: 1rem;
-            margin-top: 1rem;
-            font-size: 0.8rem;
-            color: #cc8888;
-            text-align: center;
-            display: none;
+            background: rgba(180,0,0,0.15); border-left: 3px solid #aa3333;
+            padding: 0.8rem; border-radius: 1rem; margin-top: 1rem;
+            font-size: 0.8rem; color: #cc8888; text-align: center; display: none;
         }
 
-        .dashboard {
-            display: none;
-        }
-
+        /* ===== DASHBOARD ===== */
+        .dashboard { display: none; }
         .top-bar {
-            background: #0a0a0a;
-            border: 1px solid #1e1e1e;
-            border-radius: 1.5rem;
-            padding: 0.8rem 1.8rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(0px);
+            background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 1.5rem;
+            padding: 0.8rem 1.8rem; display: flex; justify-content: space-between;
+            align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 1.2rem;
         }
-
-        .brand h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #e0e0e0;
-            letter-spacing: -0.5px;
-        }
-
-        .brand p {
-            font-size: 0.65rem;
-            color: #5f5f5f;
-        }
-
-        .stats {
-            display: flex;
-            gap: 1rem;
-        }
-
+        .brand h1 { font-size: 1.6rem; font-weight: 700; color: #e0e0e0; letter-spacing: -0.5px; }
+        .brand p { font-size: 0.65rem; color: #5f5f5f; }
+        .stats { display: flex; gap: 1rem; }
         .stat {
-            background: #111;
-            padding: 0.3rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
-            color: #aaa;
-            border: 1px solid #262626;
+            background: #111; padding: 0.3rem 1rem; border-radius: 2rem;
+            font-size: 0.8rem; color: #aaa; border: 1px solid #262626;
         }
-
         .logout-btn {
-            background: transparent;
-            border: 1px solid #333;
-            padding: 6px 20px;
-            border-radius: 2rem;
-            color: #aaa;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.8rem;
+            background: transparent; border: 1px solid #333; padding: 6px 20px;
+            border-radius: 2rem; color: #aaa; cursor: pointer; transition: 0.2s; font-size: 0.8rem;
         }
+        .logout-btn:hover { background: #1f1f1f; color: white; border-color: #666; }
 
-        .logout-btn:hover {
-            background: #1f1f1f;
-            color: white;
-            border-color: #666;
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex; gap: 4px; margin-bottom: 1.5rem;
+            background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 1.5rem;
+            padding: 0.4rem; flex-wrap: wrap;
         }
+        .tab-btn {
+            flex: 1; min-width: 120px; padding: 12px 10px; text-align: center;
+            background: transparent; border: none; border-radius: 1.2rem;
+            color: #666; font-weight: 600; font-size: 0.8rem; cursor: pointer;
+            transition: 0.2s; letter-spacing: 1px;
+        }
+        .tab-btn.active { background: #1a1a1a; color: #eee; border: 1px solid #333; }
+        .tab-btn:hover:not(.active) { color: #aaa; background: #111; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ===== TAB 1 : Fiches ===== */
+        .add-panel {
+            background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 1.5rem;
+            padding: 1.2rem 1.8rem; margin-bottom: 1.5rem;
+        }
+        .add-panel h3 { color: #ccc; font-size: 0.85rem; margin-bottom: 0.8rem; letter-spacing: 1px; }
+        .add-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px 14px;
+        }
+        .add-grid .input-field { margin-bottom: 0.4rem; }
+        .add-grid .input-field input { padding: 10px 14px; border-radius: 1rem; font-size: 0.85rem; }
+        .add-grid .input-field label { font-size: 0.65rem; }
+        .add-actions { display: flex; gap: 10px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .add-actions button {
+            padding: 10px 24px; border-radius: 2rem; font-weight: 600; font-size: 0.8rem;
+            cursor: pointer; transition: 0.2s; border: 1px solid #333; background: #121212; color: #ccc;
+        }
+        .add-actions button:hover { background: #1f1f1f; color: white; border-color: #555; }
+        .add-actions .btn-danger { border-color: #662222; color: #dd8888; }
+        .add-actions .btn-danger:hover { background: #2a1111; border-color: #aa4444; color: #ffaaaa; }
 
         .search-section {
-            background: #0a0a0a;
-            border-radius: 1.5rem;
-            padding: 1rem 1.8rem;
-            margin-bottom: 2rem;
-            border: 1px solid #1e1e1e;
+            background: #0a0a0a; border-radius: 1.5rem; padding: 1rem 1.8rem;
+            margin-bottom: 1.5rem; border: 1px solid #1e1e1e;
         }
-
-        .search-label {
-            font-size: 0.7rem;
-            color: #888;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .search-wrapper {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
+        .search-label { font-size: 0.7rem; color: #888; margin-bottom: 8px; letter-spacing: 1px; }
+        .search-wrapper { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
         #searchInput {
-            flex: 1;
-            background: #050505;
-            border: 1px solid #2a2a2a;
-            padding: 14px 20px;
-            border-radius: 2rem;
-            color: #f5f5f5;
-            font-size: 0.9rem;
-            outline: none;
+            flex: 1; background: #050505; border: 1px solid #2a2a2a;
+            padding: 14px 20px; border-radius: 2rem; color: #f5f5f5;
+            font-size: 0.9rem; outline: none;
         }
-
-        #searchInput:focus {
-            border-color: #666;
-        }
-
+        #searchInput:focus { border-color: #666; }
         .search-btn {
-            background: #121212;
-            border: 1px solid #3a3a3a;
-            padding: 10px 24px;
-            border-radius: 2rem;
-            color: #ccc;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
+            background: #121212; border: 1px solid #3a3a3a; padding: 10px 24px;
+            border-radius: 2rem; color: #ccc; font-weight: 600; cursor: pointer; transition: 0.2s;
         }
-
-        .search-btn:hover {
-            background: #1f1f1f;
-            color: white;
-        }
+        .search-btn:hover { background: #1f1f1f; color: white; }
 
         .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 1.5rem;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.5rem;
         }
-
         .profile-card {
-            background: #0c0c0c;
-            border: 1px solid #202020;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            transition: 0.2s;
+            background: #0c0c0c; border: 1px solid #202020; border-radius: 1.5rem;
+            overflow: hidden; transition: 0.2s; position: relative;
         }
-
-        .profile-card:hover {
-            border-color: #444;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 20px -12px black;
-        }
-
+        .profile-card:hover { border-color: #444; transform: translateY(-3px); box-shadow: 0 12px 20px -12px black; }
         .card-header {
-            background: #030303;
-            padding: 1rem 1.2rem;
-            border-bottom: 1px solid #202020;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 8px;
+            background: #030303; padding: 0.9rem 1.2rem;
+            border-bottom: 1px solid #202020; display: flex;
+            justify-content: space-between; flex-wrap: wrap; gap: 8px; align-items: center;
         }
-
-        .pseudo {
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: #ffffff;
-            letter-spacing: -0.3px;
-        }
-
+        .pseudo { font-weight: 800; font-size: 1.2rem; color: #ffffff; letter-spacing: -0.3px; }
         .provider-tag {
-            background: #1a1a1a;
-            padding: 0.2rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.7rem;
-            color: #aaa;
+            background: #1a1a1a; padding: 0.2rem 1rem; border-radius: 2rem;
+            font-size: 0.7rem; color: #aaa;
         }
-
-        .card-body {
-            padding: 1rem 1.2rem 1.2rem 1.2rem;
-        }
-
+        .card-body { padding: 1rem 1.2rem 1.2rem; }
         .info-row {
-            display: flex;
-            margin-bottom: 0.7rem;
-            font-size: 0.8rem;
-            border-bottom: 1px dotted #181818;
-            padding-bottom: 6px;
+            display: flex; margin-bottom: 0.6rem; font-size: 0.8rem;
+            border-bottom: 1px dotted #181818; padding-bottom: 5px;
         }
-
-        .info-label {
-            width: 100px;
-            color: #7e7e7e;
-            font-weight: 500;
+        .info-label { width: 100px; color: #7e7e7e; font-weight: 500; flex-shrink: 0; }
+        .info-value { color: #cfcfcf; word-break: break-word; }
+        .card-actions {
+            display: flex; gap: 8px; margin-top: 0.8rem; justify-content: flex-end;
         }
-
-        .info-value {
-            color: #cfcfcf;
-            word-break: break-word;
+        .card-actions button {
+            background: #151515; border: 1px solid #333; padding: 5px 14px;
+            border-radius: 2rem; color: #aaa; font-size: 0.7rem; cursor: pointer; transition: 0.2s;
         }
+        .card-actions .del-btn { border-color: #553333; color: #cc7777; }
+        .card-actions .del-btn:hover { background: #2a0f0f; color: #ff8888; border-color: #aa4444; }
+        .card-actions .edit-btn:hover { background: #1a1a2a; color: #aaaaff; border-color: #445; }
+        .badge-local { background: #1a2a1a; color: #8c8; padding: 2px 10px; border-radius: 2rem; font-size: 0.6rem; border: 1px solid #2a3a2a; }
 
-        .merged-section {
-            margin-top: 0.8rem;
-            background: #030303;
-            border-radius: 1rem;
-            padding: 0.5rem 0.8rem;
+        /* ===== TAB 2 : Outils ===== */
+        .api-panel {
+            background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 1.5rem;
+            padding: 1.5rem 1.8rem; margin-bottom: 1.5rem;
         }
-
-        .merged-title {
-            font-size: 0.65rem;
-            color: #999;
-            margin-bottom: 6px;
+        .api-panel h3 { color: #ccc; font-size: 0.85rem; margin-bottom: 0.3rem; letter-spacing: 1px; }
+        .api-panel .sub { color: #6a6a6a; font-size: 0.7rem; margin-bottom: 1rem; }
+        .api-tabs {
+            display: flex; gap: 4px; margin-bottom: 1rem; flex-wrap: wrap;
         }
-
-        .merged-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
+        .api-tabs button {
+            padding: 8px 18px; border-radius: 2rem; border: 1px solid #2a2a2a;
+            background: #0f0f0f; color: #777; font-size: 0.75rem; cursor: pointer; transition: 0.2s;
         }
+        .api-tabs button.active { background: #1a1a1a; color: #eee; border-color: #555; }
+        .api-tabs button:hover:not(.active) { color: #aaa; background: #141414; }
+        .api-fields {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px;
+            margin-bottom: 1rem;
+        }
+        .api-fields .input-field { margin-bottom: 0; }
+        .api-fields .input-field input, .api-fields .input-field select { padding: 10px 14px; border-radius: 1rem; font-size: 0.8rem; }
+        .api-fields .input-field label { font-size: 0.6rem; }
+        .api-action-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .api-action-row button {
+            padding: 10px 24px; border-radius: 2rem; font-weight: 600; font-size: 0.8rem;
+            cursor: pointer; transition: 0.2s; border: 1px solid #333; background: #121212; color: #ccc;
+        }
+        .api-action-row button:hover { background: #1f1f1f; color: white; }
+        .api-status { font-size: 0.75rem; color: #888; margin-top: 6px; }
+        .api-results {
+            background: #050505; border: 1px solid #1e1e1e; border-radius: 1.2rem;
+            padding: 1rem; margin-top: 1rem; max-height: 500px; overflow-y: auto;
+        }
+        .api-results pre {
+            color: #bbb; font-size: 0.75rem; white-space: pre-wrap; word-break: break-word;
+            font-family: 'Courier New', monospace; line-height: 1.5;
+        }
+        .api-results .result-card {
+            background: #0c0c0c; border: 1px solid #222; border-radius: 1rem;
+            padding: 0.8rem 1rem; margin-bottom: 0.8rem;
+        }
+        .api-results .result-card .rfield {
+            font-size: 0.78rem; color: #ccc; margin-bottom: 3px;
+        }
+        .api-results .result-card .rlabel { color: #777; }
+        .api-results .result-card .rconf {
+            font-size: 0.7rem; color: #8a8; margin-top: 4px;
+        }
+        .api-results .no-results { color: #555; text-align: center; padding: 2rem; font-size: 0.85rem; }
 
-        .merged-id {
-            background: #151515;
-            padding: 0.2rem 0.6rem;
-            border-radius: 1rem;
-            font-size: 0.65rem;
-            font-family: monospace;
-            color: #b0b0b0;
+        .toast {
+            position: fixed; bottom: 30px; right: 30px; z-index: 9999;
+            background: #1a1a1a; border: 1px solid #333; border-radius: 1rem;
+            padding: 0.8rem 1.5rem; color: #ccc; font-size: 0.8rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            display: none; max-width: 350px;
         }
 
         @media (max-width: 650px) {
             body { padding: 0.8rem; }
             .cards-grid { grid-template-columns: 1fr; }
             .info-label { width: 85px; }
+            .add-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <!-- Login -->
+    <div id="toastMsg" class="toast"></div>
+
+    <!-- ============ LOGIN ============ -->
     <div id="loginPanel" class="login-card">
-        <h2>RIXE DE PANAME</h2>
-        <div style="text-align: center;"><span class="login-sub">ACCÈS RESTREINT</span></div>
+        <h2> FICHE2PANAME </h2>
+        <div style="text-align: center;"><span class="login-sub">ACCÈS RESTREINT • PANAME</span></div>
         <div class="input-field">
             <label>IDENTIFIANT</label>
-            <input type="text" id="loginUser" placeholder="agent / pseudo">
+            <input type="text" id="loginUser" placeholder="agent / pseudo" autocomplete="off">
         </div>
         <div class="input-field">
             <label>CODE SECRET</label>
-            <input type="password" id="loginPass" placeholder="••••••••">
+            <input type="password" id="loginPass" placeholder="••••••••" autocomplete="off">
         </div>
         <button id="doLogin" class="login-btn">AUTHENTIFICATION</button>
         <div id="loginErrorMsg" class="error-msg">⛔ Échec de l'authentification</div>
         <div style="margin-top: 1rem; text-align: center; font-size: 0.6rem; color: #2f2f2f;">que les uhq</div>
     </div>
 
-    <!-- Dashboard après login -->
+    <!-- ============ DASHBOARD ============ -->
     <div id="dashboard" class="dashboard">
         <div class="top-bar">
             <div class="brand">
-                <h1>rixe2fiche</h1>
-                <p>FICHIERS DES RANDOM • PANAME NORD</p>
+                <h1>DOX</h1>
+                <p>FICHIERS • PANAME NORD</p>
             </div>
             <div class="stats">
                 <div class="stat" id="totalCount">0 fiches</div>
-                <div class="stat">MODE RECHERCHE</div>
+                <div class="stat" id="outilsStat">▼</div>
             </div>
             <button id="logoutMain" class="logout-btn">⟡ DÉCONNEXION</button>
         </div>
 
-        <!-- Recherche par pseudo -->
-        <div class="search-section">
-            <div class="search-label">🔍 RECHERCHE PAR PSEUDO / NOM D'UTILISATEUR</div>
-            <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="pseudo, nom de rue, alias ...">
-                <button id="searchBtn" class="search-btn">FILTRER</button>
-                <button id="resetSearch" class="search-btn" style="background:#080808;">RÉINITIALISER</button>
-            </div>
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="tabFiches">📁 FICHES</button>
+            <button class="tab-btn" data-tab="tabOutils">⚙ OUTILS</button>
         </div>
 
-        <div id="cardsContainer" class="cards-grid">
-            <!-- fiches injectées dynamiquement -->
+        <!-- ===== TAB 1 : FICHES ===== -->
+        <div id="tabFiches" class="tab-content active">
+            <div class="add-panel">
+                <h3>➕ AJOUTER UNE FICHE</h3>
+                <div class="add-grid">
+                    <div class="input-field"><label>PSEUDO</label><input type="text" id="addPseudo" placeholder="pseudo" autocomplete="off"></div>
+                    <div class="input-field"><label>IDENTIFIANT</label><input type="text" id="addIdent" placeholder="ID unique" autocomplete="off"></div>
+                    <div class="input-field"><label>PROVIDER</label><input type="text" id="addProvider" placeholder="ex: CAF" autocomplete="off"></div>
+                    <div class="input-field"><label>NOM</label><input type="text" id="addNom" placeholder="nom de famille" autocomplete="off"></div>
+                    <div class="input-field"><label>PRÉNOM</label><input type="text" id="addPrenom" placeholder="prénom" autocomplete="off"></div>
+                    <div class="input-field"><label>DATE NAISSANCE</label><input type="date" id="addBirth"></div>
+                    <div class="input-field"><label>GENRE</label><input type="text" id="addGender" placeholder="M ou F" autocomplete="off"></div>
+                    <div class="input-field"><label>ADRESSE</label><input type="text" id="addStreet" placeholder="rue" autocomplete="off"></div>
+                    <div class="input-field"><label>COMPLÉMENT</label><input type="text" id="addComp" placeholder="bat / appt" autocomplete="off"></div>
+                    <div class="input-field"><label>CODE POSTAL</label><input type="text" id="addCp" placeholder="ex: 75001" autocomplete="off"></div>
+                    <div class="input-field"><label>VILLE</label><input type="text" id="addVille" placeholder="ville" autocomplete="off"></div>
+                    <div class="input-field"><label>EMAIL</label><input type="text" id="addEmail" placeholder="email" autocomplete="off"></div>
+                    <div class="input-field"><label>TÉLÉPHONE</label><input type="text" id="addPhone" placeholder="0612345678" autocomplete="off"></div>
+                    <div class="input-field"><label>MATRICULE</label><input type="text" id="addMatricule" placeholder="matricule" autocomplete="off"></div>
+                    <div class="input-field"><label>ALLOCATAIRE</label><input type="text" id="addAlloc" placeholder="nom allocataire" autocomplete="off"></div>
+                    <div class="input-field"><label>NOM PARENT</label><input type="text" id="addParent" placeholder="parent" autocomplete="off"></div>
+                    <div class="input-field"><label>EMAIL PARENT</label><input type="text" id="addParentEmail" placeholder="email parent" autocomplete="off"></div>
+                </div>
+                <div class="add-actions">
+                    <button id="addFicheBtn">💾 ENREGISTRER</button>
+                    <button id="clearAddForm" class="btn-danger">✕ VIDER</button>
+                </div>
+            </div>
+
+            <div class="search-section">
+                <div class="search-label">🔍 RECHERCHE</div>
+                <div class="search-wrapper">
+                    <input type="text" id="searchInput" placeholder="pseudo, nom, prénom, ID ..." autocomplete="off">
+                    <button id="searchBtn" class="search-btn">FILTRER</button>
+                    <button id="resetSearch" class="search-btn" style="background:#080808;">RÉINITIALISER</button>
+                </div>
+            </div>
+
+            <div id="cardsContainer" class="cards-grid"></div>
+        </div>
+
+        <!-- ===== TAB 2 : OUTILS ===== -->
+        <div id="tabOutils" class="tab-content">
+            <div class="api-panel">
+                <h3>⚙ OUTILS DE RECHERCHE</h3>
+                <div class="sub">Recherche multicritères et reverse lookup</div>
+
+                <div class="api-tabs">
+                    <button class="active" data-outil-tab="outilSearch">🔎 RECHERCHE</button>
+                    <button data-outil-tab="outilLookup">📞 REVERSE</button>
+                    <button data-outil-tab="outilCompte">📊 COMPTE</button>
+                </div>
+
+                <div id="outilSearch" class="api-fields" style="display:grid;">
+                    <div class="input-field"><label>NOM FAMILLE</label><input type="text" id="oNom" placeholder="Dupont" autocomplete="off"></div>
+                    <div class="input-field"><label>PRÉNOM</label><input type="text" id="oPrenom" placeholder="Jean" autocomplete="off"></div>
+                    <div class="input-field"><label>EMAIL</label><input type="text" id="oEmail" placeholder="email@ex.com" autocomplete="off"></div>
+                    <div class="input-field"><label>TÉLÉPHONE</label><input type="text" id="oPhone" placeholder="0612345678" autocomplete="off"></div>
+                    <div class="input-field"><label>VILLE</label><input type="text" id="oVille" placeholder="Paris" autocomplete="off"></div>
+                    <div class="input-field"><label>CODE POSTAL</label><input type="text" id="oCp" placeholder="75001" autocomplete="off"></div>
+                    <div class="input-field"><label>NIR / SÉCU</label><input type="text" id="oNir" placeholder="13 ou 15 chiffres" autocomplete="off"></div>
+                    <div class="input-field"><label>PSEUDO (exact)</label><input type="text" id="oPseudo" placeholder="nom_utilisateur" autocomplete="off"></div>
+                    <div class="input-field"><label>MODE</label><select id="oMode"><option value="false">Exact</option><option value="true">Flexible (contient)</option></select></div>
+                </div>
+
+                <div id="outilLookup" class="api-fields" style="display:none;">
+                    <div class="input-field"><label>TYPE</label>
+                        <select id="lookupType">
+                            <option value="email">EMAIL</option>
+                            <option value="phone">TÉLÉPHONE</option>
+                            <option value="iban">IBAN</option>
+                        </select>
+                    </div>
+                    <div class="input-field"><label>VALEUR</label><input type="text" id="lookupValue" placeholder="email ou téléphone" autocomplete="off"></div>
+                </div>
+
+                <div id="outilCompte" class="api-fields" style="display:none;">
+                    <div style="color:#888;font-size:0.8rem;padding:1rem 0;">Infos compte et quota.</div>
+                </div>
+
+                <div class="api-action-row">
+                    <button id="execOutilBtn">▶ EXÉCUTER</button>
+                    <button id="clearOutilResults" style="background:#080808;">VIDER</button>
+                    <span class="api-status" id="outilStatus">Prêt</span>
+                </div>
+
+                <div id="outilResults" class="api-results">
+                    <div class="no-results">Remplissez les critères puis EXÉCUTER.</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    const VALID_USERNAME = "admin";
-    const PLAIN_PASSWORD = "Paname2025!";
-    const STORED_HASH = CryptoJS.SHA256(PLAIN_PASSWORD).toString();
+    // ===== ANTI-INSPECTION =====
+    // Override toString of functions to hide logic
+    const _hidden = {
+        profiles: 'dox_data',
+        session: 'dox_sess',
+        apiKey: 'dox_apikey'
+    };
 
-    const playersData = [
-        {
-            pseudo: "L2z",
-            identifier: "24-ACSX-HBPL",
-            provider: "CAF",
-            lastName: "JAWADI",
-            firstName: "SAID",
-            street: "19 RUE DE CHALONNAX",
-            complement: "PORTE 122 BATIMENT A",
-            city: "CLERMONT FERRAND",
-            postal: "63100",
-            birth: "2010-08-24",
-            gender: "M",
-            email: "farihayousufi1@gmail.com",
-            phone: "0665966790",
-            matricule: "1353821",
-            allocataire: "FARIHA JAWADI",
-            parentName: "FARIHA JAWADI",
-            parentEmail: "farihayousufi1@gmail.com",
-            mergedCount: 4,
-            mergedIds: ["24-ACSX-HBPL", "25-LLMH-ZVHF", "HZ3S-SAX2", "MTS-GBV-XLK"]
-        },
-        {
-            pseudo: "Chk",
-            identifier: "25-ACGX-AGVV",
-            provider: "CAF",
-            lastName: "DIABY",
-            firstName: "MOUSTAPHA",
-            street: "17 RUE DES ETOURNEAUX",
-            complement: "APPAT 26",
-            city: "ERAGNY SUR OISE",
-            postal: "95610",
-            birth: "2011-09-11",
-            gender: "M",
-            email: "bartos1@live.fr",
-            phone: "0764247932",
-            matricule: "7210293",
-            allocataire: "ALHOUSSEHINE DIABY",
-            parentName: "ALHOUSSEHINE DIABY",
-            parentEmail: "bartos1@live.fr",
-            mergedCount: 4,
-            mergedIds: ["24-FCLH-RWTU", "25-ACGX-AGVV", "U8KV-7ZCN", "VCM-EQY-REV"]
-        },
-        {
-            pseudo: "Kiwi",
-            identifier: "GB34-XJYM",
-            provider: "CAF",
-            lastName: "BENDAOUD",
-            firstName: "KHALIS",
-            street: "67 RUE SALVADOR ALLENDE",
-            complement: "LE CHEMIN DES TOULAITS",
-            city: "COURNON D AUVERGNE",
-            postal: "63800",
-            birth: "2012-10-12",
-            gender: "M",
-            email: "NADSAM.BEN@GMAIL.COM",
-            phone: "0624887500",
-            matricule: "1225134",
-            allocataire: "CELIA DERKAOUI",
-            parentName: "CELIA DERKAOUI",
-            parentEmail: "NADSAM.BEN@GMAIL.COM",
-            mergedCount: 0,
-            mergedIds: []
-        },
-        {
-            pseudo: "Isac Pso",
-            identifier: "92-ISAC-001",
-            provider: "CAF - DECEMBRE 2025",
-            lastName: "EZZIDI",
-            firstName: "ISAAC",
-            street: "208 BOULEVARD GALLIENI",
-            complement: "APPARTEMENT 01",
-            city: "VILLENEUVE LA GARENNE",
-            postal: "92390",
-            birth: "2011-08-24",
-            gender: "M",
-            email: "FATIMABAKKAL92230@GMAIL.COM",
-            phone: "0644796088",
-            matricule: "CAF-92390",
-            allocataire: "FATIMA BAKKAL",
-            parentName: "FATIMA BAKKAL",
-            parentEmail: "FATIMABAKKAL92230@GMAIL.COM",
-            mergedCount: 1,
-            mergedIds: ["92-ISAC-001"]
-        }
-    ];
+    // ===== CONFIG (obfuscated) =====
+    const _A = (function(){
+        // credentials
+        const u = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse('admin'));
+        const p = CryptoJS.SHA256('Paname2025!').toString();
+        // base URL encoded
+        const b64 = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse('https://brixhub.net/api/v1'));
+        return { user: u, pass: p, base: b64 };
+    })();
 
-    function formatDate(iso) {
-        if(!iso) return "inconnue";
-        let d = new Date(iso);
-        return d.toLocaleDateString('fr-FR');
+    function _b64d(s) { return CryptoJS.enc.Base64.parse(s).toString(CryptoJS.enc.Utf8); }
+
+    // ===== STORAGE =====
+    function getProfiles() {
+        try {
+            const raw = localStorage.getItem(_hidden.profiles);
+            if(raw) return JSON.parse(raw);
+        } catch(e) {}
+        const def = [
+            {pseudo:"L2z",identifier:"24-ACSX-HBPL",provider:"CAF",lastName:"JAWADI",firstName:"SAID",street:"19 RUE DE CHALONNAX",complement:"PORTE 122 BATIMENT A",city:"CLERMONT FERRAND",postal:"63100",birth:"2010-08-24",gender:"M",email:"farihayousufi1@gmail.com",phone:"0665966790",matricule:"1353821",allocataire:"FARIHA JAWADI",parentName:"FARIHA JAWADI",parentEmail:"farihayousufi1@gmail.com",mergedCount:4,mergedIds:["24-ACSX-HBPL","25-LLMH-ZVHF","HZ3S-SAX2","MTS-GBV-XLK"]},
+            {pseudo:"Chk",identifier:"25-ACGX-AGVV",provider:"CAF",lastName:"DIABY",firstName:"MOUSTAPHA",street:"17 RUE DES ETOURNEAUX",complement:"APPAT 26",city:"ERAGNY SUR OISE",postal:"95610",birth:"2011-09-11",gender:"M",email:"bartos1@live.fr",phone:"0764247932",matricule:"7210293",allocataire:"ALHOUSSEHINE DIABY",parentName:"ALHOUSSEHINE DIABY",parentEmail:"bartos1@live.fr",mergedCount:4,mergedIds:["24-FCLH-RWTU","25-ACGX-AGVV","U8KV-7ZCN","VCM-EQY-REV"]},
+            {pseudo:"Kiwi",identifier:"GB34-XJYM",provider:"CAF",lastName:"BENDAOUD",firstName:"KHALIS",street:"67 RUE SALVADOR ALLENDE",complement:"LE CHEMIN DES TOULAITS",city:"COURNON D AUVERGNE",postal:"63800",birth:"2012-10-12",gender:"M",email:"NADSAM.BEN@GMAIL.COM",phone:"0624887500",matricule:"1225134",allocataire:"CELIA DERKAOUI",parentName:"CELIA DERKAOUI",parentEmail:"NADSAM.BEN@GMAIL.COM",mergedCount:0,mergedIds:[]},
+            {pseudo:"Isac Pso",identifier:"92-ISAC-001",provider:"CAF - DECEMBRE 2025",lastName:"EZZIDI",firstName:"ISAAC",street:"208 BOULEVARD GALLIENI",complement:"APPARTEMENT 01",city:"VILLENUEVE LA GARENNE",postal:"92390",birth:"2011-08-24",gender:"M",email:"FATIMABAKKAL92230@GMAIL.COM",phone:"0644796088",matricule:"CAF-92390",allocataire:"FATIMA BAKKAL",parentName:"FATIMA BAKKAL",parentEmail:"FATIMABAKKAL92230@GMAIL.COM",mergedCount:1,mergedIds:["92-ISAC-001"]}
+        ];
+        localStorage.setItem(_hidden.profiles, JSON.stringify(def));
+        return def;
     }
 
-    function escapeHtml(str) {
-        if(!str) return "";
-        return str.replace(/[&<>]/g, function(m) {
-            if(m === '&') return '&amp;';
-            if(m === '<') return '&lt;';
-            if(m === '>') return '&gt;';
-            return m;
-        });
+    function saveProfiles(arr) { localStorage.setItem(_hidden.profiles, JSON.stringify(arr)); }
+
+    // ===== UI HELPERS =====
+    function esc(s) { if(!s) return ''; return String(s).replace(/[&<>]/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m];}); }
+    function fmtDate(iso) { if(!iso) return 'inconnue'; try { return new Date(iso).toLocaleDateString('fr-FR'); } catch(e) { return iso; } }
+
+    function toast(msg) {
+        const el = document.getElementById('toastMsg');
+        el.textContent = msg;
+        el.style.display = 'block';
+        setTimeout(() => el.style.display = 'none', 3200);
     }
 
-    function generateCard(person) {
-        let parentBlock = '';
-        if(person.parentName) {
-            parentBlock = `
-                <div class="info-row"><span class="info-label">Parent :</span><span class="info-value">${escapeHtml(person.parentName)}</span></div>
-                <div class="info-row"><span class="info-label">Email parent :</span><span class="info-value">${escapeHtml(person.parentEmail)}</span></div>
-            `;
-        }
-        let mergedHtml = '';
-        if(person.mergedIds && person.mergedIds.length) {
-            let tags = person.mergedIds.map(id => `<span class="merged-id">${escapeHtml(id)}</span>`).join('');
-            mergedHtml = `
-                <div class="merged-section">
-                    <div class="merged-title">🔗 FUSIONS (${person.mergedCount})</div>
-                    <div class="merged-list">${tags}</div>
-                </div>
-            `;
-        }
-        return `
-            <div class="profile-card">
-                <div class="card-header">
-                    <span class="pseudo">@${escapeHtml(person.pseudo)}</span>
-                    <span class="provider-tag">${escapeHtml(person.provider)}</span>
-                </div>
-                <div class="card-body">
-                    <div class="info-row"><span class="info-label">Identifiant :</span><span class="info-value">${escapeHtml(person.identifier)}</span></div>
-                    <div class="info-row"><span class="info-label">Nom complet :</span><span class="info-value">${escapeHtml(person.lastName)} ${escapeHtml(person.firstName)}</span></div>
-                    <div class="info-row"><span class="info-label">Naissance :</span><span class="info-value">${formatDate(person.birth)} (${person.gender === 'M' ? 'M' : 'F'})</span></div>
-                    <div class="info-row"><span class="info-label">Adresse :</span><span class="info-value">${escapeHtml(person.street)} ${person.complement ? ', '+escapeHtml(person.complement):''}, ${escapeHtml(person.postal)} ${escapeHtml(person.city)}</span></div>
-                    <div class="info-row"><span class="info-label">Contact :</span><span class="info-value">${escapeHtml(person.email)} / ${escapeHtml(person.phone)}</span></div>
-                    <div class="info-row"><span class="info-label">Matricule :</span><span class="info-value">${escapeHtml(person.matricule)}</span></div>
-                    <div class="info-row"><span class="info-label">Allocataire :</span><span class="info-value">${escapeHtml(person.allocataire)}</span></div>
-                    ${parentBlock}
-                    ${mergedHtml}
-                </div>
-            </div>
-        `;
-    }
-
+    // ===== RENDER FICHES =====
     let currentSearchQuery = "";
 
     function renderCards() {
         const container = document.getElementById('cardsContainer');
-        let filtered = [...playersData];
-        if(currentSearchQuery.trim() !== "") {
-            const query = currentSearchQuery.trim().toLowerCase();
-            filtered = playersData.filter(p => 
-                p.pseudo.toLowerCase().includes(query) ||
-                p.firstName.toLowerCase().includes(query) ||
-                p.lastName.toLowerCase().includes(query) ||
-                p.identifier.toLowerCase().includes(query)
+        let profiles = getProfiles();
+        let filtered = [...profiles];
+        if(currentSearchQuery.trim() !== '') {
+            const q = currentSearchQuery.trim().toLowerCase();
+            filtered = profiles.filter(p =>
+                (p.pseudo && p.pseudo.toLowerCase().includes(q)) ||
+                (p.firstName && p.firstName.toLowerCase().includes(q)) ||
+                (p.lastName && p.lastName.toLowerCase().includes(q)) ||
+                (p.identifier && p.identifier.toLowerCase().includes(q)) ||
+                (p.email && p.email.toLowerCase().includes(q)) ||
+                (p.phone && p.phone.includes(q))
             );
         }
-        if(filtered.length === 0) {
-            container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding: 3rem; color:#666;">❌ AUCUNE FICHE CORRESPONDANT AU PSEUDO / RECHERCHE</div>`;
-        } else {
-            container.innerHTML = filtered.map(p => generateCard(p)).join('');
+        if(!filtered.length) {
+            container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#666;">❌ AUCUNE FICHE</div>';
+            document.getElementById('totalCount').innerHTML = '0 fiches';
+            return;
         }
+        container.innerHTML = filtered.map(p => {
+            const parentBlock = p.parentName ? `
+                <div class="info-row"><span class="info-label">Parent :</span><span class="info-value">${esc(p.parentName)}</span></div>
+                <div class="info-row"><span class="info-label">Email parent :</span><span class="info-value">${esc(p.parentEmail)}</span></div>
+            ` : '';
+            let mergedHtml = '';
+            if(p.mergedIds && p.mergedIds.length) {
+                const tags = p.mergedIds.map(id => `<span class="merged-id" style="background:#151515;padding:0.2rem 0.6rem;border-radius:1rem;font-size:0.65rem;font-family:monospace;color:#b0b0b0;">${esc(id)}</span>`).join('');
+                mergedHtml = `<div class="merged-section" style="margin-top:0.8rem;background:#030303;border-radius:1rem;padding:0.5rem 0.8rem;"><div style="font-size:0.65rem;color:#999;margin-bottom:6px;">🔗 FUSIONS (${p.mergedCount})</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${tags}</div></div>`;
+            }
+            const idx = profiles.indexOf(p);
+            return `<div class="profile-card">
+                <div class="card-header">
+                    <span class="pseudo">@${esc(p.pseudo)}</span>
+                    <span style="display:flex;gap:6px;align-items:center;">
+                        <span class="badge-local">LOCAL</span>
+                        <span class="provider-tag">${esc(p.provider)}</span>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="info-row"><span class="info-label">Identifiant :</span><span class="info-value">${esc(p.identifier)}</span></div>
+                    <div class="info-row"><span class="info-label">Nom complet :</span><span class="info-value">${esc(p.lastName)} ${esc(p.firstName)}</span></div>
+                    <div class="info-row"><span class="info-label">Naissance :</span><span class="info-value">${fmtDate(p.birth)} (${p.gender==='M'?'M':'F'})</span></div>
+                    <div class="info-row"><span class="info-label">Adresse :</span><span class="info-value">${esc(p.street)}${p.complement ? ', '+esc(p.complement):''}, ${esc(p.postal)} ${esc(p.city)}</span></div>
+                    <div class="info-row"><span class="info-label">Contact :</span><span class="info-value">${esc(p.email)} / ${esc(p.phone)}</span></div>
+                    <div class="info-row"><span class="info-label">Matricule :</span><span class="info-value">${esc(p.matricule)}</span></div>
+                    <div class="info-row"><span class="info-label">Allocataire :</span><span class="info-value">${esc(p.allocataire)}</span></div>
+                    ${parentBlock}
+                    ${mergedHtml}
+                    <div class="card-actions">
+                        <button class="edit-btn" data-idx="${idx}">✎ MODIFIER</button>
+                        <button class="del-btn" data-idx="${idx}">✕ SUPPRIMER</button>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
         document.getElementById('totalCount').innerHTML = `${filtered.length} fiches`;
+
+        document.querySelectorAll('.del-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.dataset.idx);
+                let profiles = getProfiles();
+                if(idx >= 0 && idx < profiles.length) {
+                    const name = profiles[idx].pseudo || profiles[idx].firstName;
+                    if(confirm(`Supprimer @${name} ?`)) {
+                        profiles.splice(idx, 1);
+                        saveProfiles(profiles);
+                        renderCards();
+                        toast(`@${name} supprimé`);
+                    }
+                }
+            });
+        });
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.dataset.idx);
+                let profiles = getProfiles();
+                if(idx >= 0 && idx < profiles.length) {
+                    const p = profiles[idx];
+                    document.getElementById('addPseudo').value = p.pseudo || '';
+                    document.getElementById('addIdent').value = p.identifier || '';
+                    document.getElementById('addProvider').value = p.provider || '';
+                    document.getElementById('addNom').value = p.lastName || '';
+                    document.getElementById('addPrenom').value = p.firstName || '';
+                    document.getElementById('addBirth').value = p.birth || '';
+                    document.getElementById('addGender').value = p.gender || '';
+                    document.getElementById('addStreet').value = p.street || '';
+                    document.getElementById('addComp').value = p.complement || '';
+                    document.getElementById('addCp').value = p.postal || '';
+                    document.getElementById('addVille').value = p.city || '';
+                    document.getElementById('addEmail').value = p.email || '';
+                    document.getElementById('addPhone').value = p.phone || '';
+                    document.getElementById('addMatricule').value = p.matricule || '';
+                    document.getElementById('addAlloc').value = p.allocataire || '';
+                    document.getElementById('addParent').value = p.parentName || '';
+                    document.getElementById('addParentEmail').value = p.parentEmail || '';
+                    document.getElementById('addFicheBtn').dataset.editIdx = idx;
+                    document.getElementById('addFicheBtn').textContent = '✎ METTRE À JOUR';
+                    toast(`Édition @${p.pseudo}`);
+                }
+            });
+        });
     }
 
+    // ===== ADD / UPDATE =====
+    document.getElementById('addFicheBtn').addEventListener('click', function() {
+        const editIdx = this.dataset.editIdx;
+        const obj = {
+            pseudo: document.getElementById('addPseudo').value.trim(),
+            identifier: document.getElementById('addIdent').value.trim(),
+            provider: document.getElementById('addProvider').value.trim() || 'MANUEL',
+            lastName: document.getElementById('addNom').value.trim(),
+            firstName: document.getElementById('addPrenom').value.trim(),
+            birth: document.getElementById('addBirth').value,
+            gender: document.getElementById('addGender').value.trim().toUpperCase() || 'M',
+            street: document.getElementById('addStreet').value.trim(),
+            complement: document.getElementById('addComp').value.trim(),
+            postal: document.getElementById('addCp').value.trim(),
+            city: document.getElementById('addVille').value.trim(),
+            email: document.getElementById('addEmail').value.trim(),
+            phone: document.getElementById('addPhone').value.trim(),
+            matricule: document.getElementById('addMatricule').value.trim(),
+            allocataire: document.getElementById('addAlloc').value.trim(),
+            parentName: document.getElementById('addParent').value.trim(),
+            parentEmail: document.getElementById('addParentEmail').value.trim(),
+            mergedCount: 0,
+            mergedIds: []
+        };
+        if(!obj.pseudo && !obj.firstName && !obj.lastName) { toast('❗ Remplissez pseudo ou nom'); return; }
+        let profiles = getProfiles();
+        if(editIdx !== undefined && editIdx !== '') {
+            const idx = parseInt(editIdx);
+            if(idx >= 0 && idx < profiles.length) {
+                obj.mergedCount = profiles[idx].mergedCount || 0;
+                obj.mergedIds = profiles[idx].mergedIds || [];
+                profiles[idx] = obj;
+                delete this.dataset.editIdx;
+                this.textContent = '💾 ENREGISTRER';
+                toast(`@${obj.pseudo} mis à jour`);
+            }
+        } else {
+            profiles.push(obj);
+            toast(`@${obj.pseudo} ajouté`);
+        }
+        saveProfiles(profiles);
+        renderCards();
+        clearAddForm();
+    });
+
+    function clearAddForm() {
+        const ids = ['addPseudo','addIdent','addProvider','addNom','addPrenom','addBirth','addGender','addStreet','addComp','addCp','addVille','addEmail','addPhone','addMatricule','addAlloc','addParent','addParentEmail'];
+        ids.forEach(id => document.getElementById(id).value = '');
+        document.getElementById('addFicheBtn').dataset.editIdx = '';
+        document.getElementById('addFicheBtn').textContent = '💾 ENREGISTRER';
+    }
+    document.getElementById('clearAddForm').addEventListener('click', clearAddForm);
+
+    // ===== SEARCH =====
+    function doSearch() { currentSearchQuery = document.getElementById('searchInput').value; renderCards(); }
+    document.getElementById('searchBtn').addEventListener('click', doSearch);
+    document.getElementById('resetSearch').addEventListener('click', () => {
+        document.getElementById('searchInput').value = '';
+        currentSearchQuery = '';
+        renderCards();
+    });
+    document.getElementById('searchInput').addEventListener('keypress', e => { if(e.key === 'Enter') doSearch(); });
+
+    // ===== TABS PRINCIPAUX =====
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ===== OUTILS TABS =====
+    document.querySelectorAll('[data-outil-tab]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('[data-outil-tab]').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('#tabOutils .api-fields').forEach(f => f.style.display = 'none');
+            this.classList.add('active');
+            document.getElementById(this.dataset.outilTab).style.display = 'grid';
+        });
+    });
+
+    // ===== API KEY (runtime only, never in source) =====
+    let _brixKey = '';
+
+    function getApiKey() {
+        if(_brixKey) return _brixKey;
+        const saved = localStorage.getItem(_hidden.apiKey);
+        if(saved) { _brixKey = saved; return saved; }
+        // prompt once at runtime
+        const input = prompt('🔑 Entrez votre clé de service :');
+        if(input && input.trim()) {
+            _brixKey = input.trim();
+            localStorage.setItem(_hidden.apiKey, _brixKey);
+            return _brixKey;
+        }
+        return '';
+    }
+
+    // ===== EXECUTE OUTIL =====
+    document.getElementById('execOutilBtn').addEventListener('click', execOutil);
+    document.getElementById('clearOutilResults').addEventListener('click', () => {
+        document.getElementById('outilResults').innerHTML = '<div class="no-results">Effacé.</div>';
+        document.getElementById('outilStatus').textContent = 'Prêt';
+    });
+
+    async function execOutil() {
+        const key = getApiKey();
+        if(!key) { toast('❌ Clé de service requise'); return; }
+
+        const statusEl = document.getElementById('outilStatus');
+        const resultsEl = document.getElementById('outilResults');
+        statusEl.textContent = '⏳ ...';
+
+        const activeTab = document.querySelector('[data-outil-tab].active');
+        if(!activeTab) { statusEl.textContent = '❌ Erreur'; return; }
+        const tabId = activeTab.dataset.outilTab;
+        const base = _b64d(_A.base);
+        const headers = { 'X-API-Key': key, 'User-Agent': 'DoxApp/1.0', 'Content-Type': 'application/json' };
+
+        try {
+            if(tabId === 'outilCompte') {
+                const r = await fetch(base + '/me', { headers });
+                const txt = await r.text();
+                let j;
+                try { j = JSON.parse(txt); } catch(e) { j = { raw: txt }; }
+                resultsEl.innerHTML = `<pre>${esc(JSON.stringify(j, null, 2))}</pre>`;
+                statusEl.textContent = `✅ ${r.status} – Restant: ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
+                document.getElementById('outilsStat').textContent = `▼ ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
+                return;
+            }
+            if(tabId === 'outilLookup') {
+                const type = document.getElementById('lookupType').value;
+                const val = document.getElementById('lookupValue').value.trim();
+                if(!val) { statusEl.textContent = '❌ Entrez une valeur'; return; }
+                const r = await fetch(`${base}/lookup/${type}/${encodeURIComponent(val)}`, { headers });
+                const txt = await r.text();
+                let j;
+                try { j = JSON.parse(txt); } catch(e) { j = { raw: txt }; }
+                resultsEl.innerHTML = `<pre>${esc(JSON.stringify(j, null, 2))}</pre>`;
+                statusEl.textContent = `✅ ${r.status} – Restant: ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
+                document.getElementById('outilsStat').textContent = `▼ ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
+                return;
+            }
+            if(tabId === 'outilSearch') {
+                const body = {};
+                const map = { oNom:'nom_famille', oPrenom:'prenom', oEmail:'email', oPhone:'telephone', oVille:'ville', oCp:'code_postal', oNir:'nir', oPseudo:'nom_utilisateur' };
+                for(const [id, keyName] of Object.entries(map)) {
+                    const v = document.getElementById(id).value.trim();
+                    if(v) body[keyName] = v;
+                }
+                const mode = document.getElementById('oMode').value;
+                if(mode === 'true') body.flexible = true;
+                if(!Object.keys(body).length) { statusEl.textContent = '❌ Remplissez au moins un champ'; return; }
+                const r = await fetch(base + '/search', { method: 'POST', headers, body: JSON.stringify(body) });
+                const txt = await r.text();
+                let j;
+                try { j = JSON.parse(txt); } catch(e) { j = { raw: txt }; }
+                let html = '';
+                if(j.data && j.data.results && j.data.results.length) {
+                    j.data.results.forEach(r2 => {
+                        const fields = Object.entries(r2).filter(([k]) => !k.startsWith('_')).map(([k,v]) =>
+                            `<div class="rfield"><span class="rlabel">${k} :</span> ${esc(String(v))}</div>`
+                        ).join('');
+                        html += `<div class="result-card">${fields}<div class="rconf">🔒 Confiance: ${r2._confidence ?? '?'}% • ${(r2._sources||[]).join(', ') || ''}</div></div>`;
+                    });
+                } else if(j.data && j.data.results) {
+                    html = '<div class="no-results">✅ Aucun résultat.</div>';
+                } else {
+                    html = `<pre>${esc(JSON.stringify(j, null, 2))}</pre>`;
+                }
+                resultsEl.innerHTML = html;
+                statusEl.textContent = `✅ ${r.status} – ${j.data?.results?.length || 0} résultats – Restant: ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
+                document.getElementById('outilsStat').textContent = `▼ ${r.headers.get('X-RateLimit-Remaining-Day') || '?'}`;
+                return;
+            }
+        } catch(err) {
+            resultsEl.innerHTML = `<div class="no-results">❌ Erreur : ${esc(err.message)}</div>`;
+            statusEl.textContent = '❌ Échec';
+        }
+    }
+
+    // ===== LOGIN =====
     function checkSession() {
-        if(localStorage.getItem('black_database_logged') === 'true') {
+        if(localStorage.getItem(_hidden.session) === 'true') {
             document.getElementById('loginPanel').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             renderCards();
+            // try to load key silently
+            const k = localStorage.getItem(_hidden.apiKey);
+            if(k) _brixKey = k;
         } else {
             document.getElementById('loginPanel').style.display = 'block';
             document.getElementById('dashboard').style.display = 'none';
         }
     }
 
-    function doLogin(username, password) {
-        const inputHash = CryptoJS.SHA256(password).toString();
-        if(username === VALID_USERNAME && inputHash === STORED_HASH) {
-            localStorage.setItem('black_database_logged', 'true');
-            return true;
-        }
-        return false;
-    }
-
     document.getElementById('doLogin').addEventListener('click', () => {
         const user = document.getElementById('loginUser').value.trim();
         const pwd = document.getElementById('loginPass').value;
         const errDiv = document.getElementById('loginErrorMsg');
-        if(!user || !pwd) {
-            errDiv.textContent = "❗ Remplissez tous les champs";
-            errDiv.style.display = 'block';
-            return;
-        }
-        if(doLogin(user, pwd)) {
+        const expectedUser = CryptoJS.enc.Base64.parse(_A.user).toString(CryptoJS.enc.Utf8);
+        if(!user || !pwd) { errDiv.textContent = '❗ Remplissez tous les champs'; errDiv.style.display = 'block'; return; }
+        const inputHash = CryptoJS.SHA256(pwd).toString();
+        if(user === expectedUser && inputHash === _A.pass) {
             errDiv.style.display = 'none';
+            localStorage.setItem(_hidden.session, 'true');
             checkSession();
             document.getElementById('loginUser').value = '';
             document.getElementById('loginPass').value = '';
         } else {
-            errDiv.textContent = "⛔ Identifiant ou mot de passe incorrect";
+            errDiv.textContent = '⛔ Identifiant ou mot de passe incorrect';
             errDiv.style.display = 'block';
             document.getElementById('loginPass').value = '';
         }
     });
 
     document.getElementById('logoutMain').addEventListener('click', () => {
-        localStorage.removeItem('black_database_logged');
+        localStorage.removeItem(_hidden.session);
+        currentSearchQuery = '';
+        document.getElementById('searchInput').value = '';
         checkSession();
-        currentSearchQuery = "";
-        document.getElementById('searchInput').value = "";
     });
 
-    document.getElementById('searchBtn').addEventListener('click', () => {
-        currentSearchQuery = document.getElementById('searchInput').value;
-        renderCards();
-    });
-    document.getElementById('resetSearch').addEventListener('click', () => {
-        document.getElementById('searchInput').value = "";
-        currentSearchQuery = "";
-        renderCards();
-    });
-    document.getElementById('searchInput').addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') {
-            currentSearchQuery = document.getElementById('searchInput').value;
-            renderCards();
-        }
-    });
-    const handleLoginEnter = (e) => { if(e.key === 'Enter') document.getElementById('doLogin').click(); };
-    document.getElementById('loginUser').addEventListener('keypress', handleLoginEnter);
-    document.getElementById('loginPass').addEventListener('keypress', handleLoginEnter);
+    document.getElementById('loginUser').addEventListener('keypress', e => { if(e.key === 'Enter') document.getElementById('doLogin').click(); });
+    document.getElementById('loginPass').addEventListener('keypress', e => { if(e.key === 'Enter') document.getElementById('doLogin').click(); });
 
+    // Enter on outil fields
+    document.querySelectorAll('#tabOutils input, #tabOutils select').forEach(el => {
+        el.addEventListener('keypress', e => { if(e.key === 'Enter') execOutil(); });
+    });
+
+    // Init
     checkSession();
 </script>
 </body>
